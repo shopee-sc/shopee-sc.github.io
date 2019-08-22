@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://shopee-sc.github.io/blog</id>
+    <title>Shopee Supply Chain FE Blog</title>
+    <updated>2019-08-22T06:00:00Z</updated>
+    <generator>Feed for Node.js</generator>
+    <link rel="alternate" href="https://shopee-sc.github.io/blog"/>
+    <subtitle>The best place to stay up-to-date with the latest Shopee Supply Chain FE news and events.</subtitle>
+    <logo>https://shopee-sc.github.io/img/favicon.ico</logo>
+    <rights>Copyright © 2019 Shopee</rights>
+    <entry>
+        <title type="html"><![CDATA[如何理解 React 高阶组件(HOC)?]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/08/22/hoc.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/08/22/hoc.html">
+        </link>
+        <updated>2019-08-22T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p><em>本篇文章适合想要了解 React 高阶组件(React High-Order Component) 而且对函数式编程不熟悉的同学阅读，不合适对高阶组件以及函数式编程很熟悉的同学阅读(写的有点啰嗦哈哈)。本篇文章的目的是让没有函数式编程经验的同学理解高阶组件，一瞥高阶组件的强大，希望大家可以把高阶组件用到自己的项目中去。</em></p>
+]]></summary>
+        <author>
+            <name>Victor Wang</name>
+            <uri>https://github.com/beizhedenglong</uri>
+        </author>
+    </entry>
+</feed>

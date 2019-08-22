@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>如何理解 React 高阶组件(HOC)? · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="*本篇文章适合想要了解 React 高阶组件(React High-Order Component) 而且对函数式编程不熟悉的同学阅读，不合适对高阶组件以及函数式编程很熟悉的同学阅读(写的有点啰嗦哈哈)。本篇文章的目的是让没有函数式编程经验的同学理解高阶组件，一瞥高阶组件的强大，希望大家可以把高阶组件用到自己的项目中去。*"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="如何理解 React 高阶组件(HOC)? · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/08/22/hoc"/><meta property="og:description" content="*本篇文章适合想要了解 React 高阶组件(React High-Order Component) 而且对函数式编程不熟悉的同学阅读，不合适对高阶组件以及函数式编程很熟悉的同学阅读(写的有点啰嗦哈哈)。本篇文章的目的是让没有函数式编程经验的同学理解高阶组件，一瞥高阶组件的强大，希望大家可以把高阶组件用到自己的项目中去。*"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/08/22/hoc">如何理解 React 高阶组件(HOC)?</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/08/22/hoc">如何理解 React 高阶组件(HOC)?</a></h1><p class="post-meta">August 22, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/beizhedenglong" target="_blank" rel="noreferrer noopener">Victor Wang</a></p></div></header><div><span><p><em>本篇文章适合想要了解 React 高阶组件(React High-Order Component) 而且对函数式编程不熟悉的同学阅读，不合适对高阶组件以及函数式编程很熟悉的同学阅读(写的有点啰嗦哈哈)。本篇文章的目的是让没有函数式编程经验的同学理解高阶组件，一瞥高阶组件的强大，希望大家可以把高阶组件用到自己的项目中去。</em></p>
+<!--truncate-->
+<p>好了废话说完了，让我们进入正题。在说高阶组件是啥之前，我们先来看看 React Component 是啥：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> Person = <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{props.name}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</code></pre>
+<p>这里的 Person 组件接收 props  返回 React element，习惯上把这种组件叫做 Functional Component，<strong>但你可以把 Person 理解是一个函数，它接收的参数是 props，返回的是 React Element。</strong></p>
+<p>下面我们来看看高阶组件是啥：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> identity = <span class="hljs-function"><span class="hljs-params">func</span> =&gt;</span> func
+</code></pre>
+<p>这里的 identity 接受一个 function，然后原样返回这个 function，我说这个 identity 函数是个高阶函数大家应该没有疑问吧？对，identity就是一个简单的高阶函数。<strong>如果我们把组件理解成函数，高阶组件就可以理解为是高阶函数。高阶函数接收函数作为函数的参数，返回一个函数；高阶组件接受组件作为函数的参数，返回一个组件。</strong> 现在我们把 identity 的形式换一下：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> identity = <span class="hljs-function"><span class="hljs-params">BaseComponent</span> =&gt;</span> BaseComponent
+</code></pre>
+<p>这里的 identity 就是一个简单的高阶组件，它接受一个组件，然后原样返回这个组件。说白了，我觉得高阶组件和高阶函数本质上就是一毛一样的东西。熟悉 ramdajs 的同学，对 identity 函数一定不陌生，不过我们这里的 identity 作为高阶组件，用处不是很大。</p>
+<p>有同学可能会问了这就是高阶组件嘛？有啥用？我们下面来看一个贴近实际的例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> List = <span class="hljs-function">(<span class="hljs-params">{ data }</span>) =&gt;</span> (
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+    {data.map(item =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.name}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}
+  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+)
+</code></pre>
+<p>我们有一个这样的 List 组件，如果我们想给这个 List 组件加一个 loading 功能，我们可以这么做：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> List = <span class="hljs-function">(<span class="hljs-params">{ data, isLoading }</span>) =&gt;</span> (
+  isLoading ?
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>我正在加载...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> :
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {data.map(item =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.name}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+)
+</code></pre>
+<p>我们修改一下 List 组件的代码，让它根据 isLoading 的状态来判断是否出现加载动画。这样做不是不可以，但是不够优雅。第一，这么做需要修改原来组件的代码；第二，如果我们有其它组件，比如 Table也需要 loading 功能，我们又需要重复写相同的判断逻辑。我们用高阶组件/函数就可以完美的解决上面两个问题。</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> withLoading = <span class="hljs-function"><span class="hljs-params">BaseComponent</span> =&gt;</span> <span class="hljs-function">(<span class="hljs-params">{ isLoading, ...otherProps }</span>) =&gt;</span> (
+  isLoading ?
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>我正在加载...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> :
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">BaseComponent</span> {<span class="hljs-attr">...otherProps</span>} /&gt;</span>
+)
+
+const LoadingList = withLoading(List)
+</span></code></pre>
+<p>我们这里的 withLoading 接受一个 BaseComponent，然后返回一个加强了的组件(LoadingList)，我们在 LoadingList 内部处理了 loading 的判断逻辑，这样我们既不用修改 List 的码，也可以复用loading 的判断逻辑。以后有组件需要 loading 功能我就就可以通过调用 withLoading 来实现，你也可以用 decorator (@withLoading) 的形式来调用。</p>
+<pre><code class="hljs css language-js">@withLoading
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Table</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  <span class="hljs-comment">//...</span>
+}
+</code></pre>
+<p>withLoading 的使用方式和 react-router 里的 withRouter 使用方式很像对吧，withRouter 就是一个高阶组件，会把路由相关的一些数据注入到传进来的组件中去。</p>
+<p>我们再看一个的例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> flattern = <span class="hljs-function"><span class="hljs-params">propKey</span> =&gt;</span> <span class="hljs-function"><span class="hljs-params">BaseComponent</span> =&gt;</span> <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">BaseComponent</span> {<span class="hljs-attr">...props</span>} {<span class="hljs-attr">...props</span>[<span class="hljs-attr">propKey</span>]} /&gt;</span>
+</span></code></pre>
+<p>我们的这个 flatten 函数接受了一个 propKey 然后返回了一个高阶组件，它的作用就是将 props 里的某个 key 扁平化(调用形式有点像redux 里的 connect 对不对)，这样做有什么好处？</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> FlatternLoadingList = flattern(<span class="hljs-string">'list'</span>)(LoadingList)
+...
+<span class="hljs-comment">// 我们就可以这样调用组件</span>
+&lt;FlatternLoadingList list={...}/&gt;
+<span class="hljs-comment">// 而不用像下面这样一个个手动传递 props</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">LoadingList</span> <span class="hljs-attr">data</span>=<span class="hljs-string">{...}</span> <span class="hljs-attr">isLoading</span>=<span class="hljs-string">{...}/</span>&gt;</span>
+</span></code></pre>
+<p>假设我们 List 组件需要读取 router 里的参数了，整个调用过程就会变成这样：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> LoadingList = withLoading(List)
+
+<span class="hljs-keyword">const</span> FlatternLoadingList = flattern(<span class="hljs-string">'list'</span>)(LoadingList)
+
+<span class="hljs-keyword">const</span> EnhancedList = withRouter(FlatternLoadingList)
+
+<span class="hljs-comment">// 或者是下面这样， 难以阅读</span>
+<span class="hljs-keyword">const</span> EnhancedList2 = withRouter(flattern(<span class="hljs-string">'list'</span>)(withLoading(List)))
+</code></pre>
+<p>如果我们需要调用的高阶组件越来越多，调用过程会变得繁琐、难以阅读，这是时候我们需要引入 <a href="https://en.wikipedia.org/wiki/Function_composition_(computer_science)">compose</a>。compose 在函数式编程里的应用非常普遍, redux 里也提供了 compose 函数。关于 compose 的延伸阅读可以参考<a href="https://github.com/MostlyAdequate/mostly-adequate-guide/blob/master/ch05.md">这里</a>。利用 compose 我们就写成这样：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> EnhancedList = compose(
+  withRouter,
+  flattern(<span class="hljs-string">'list'</span>),
+  withLoading,
+)(List)
+</code></pre>
+<p>是不是很简洁？我们也可以用 <a href="http://ramdajs.com/docs/#pipe">pipe</a> 函数，它和 compose 函数类似， 只不过它的组合顺序是从左到右而 compose 是从右到左。</p>
+<p>Higher-order Components 这个 pattern 最早是sebmarkbage 在 <a href="https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775">gist</a> 上提出来的，现在 React 社区里可以看到大量高阶组件以及函数式编程的影子。关于高阶组件的一些高级用法、性能问题这里就不做讨论了， 感兴趣的同学自己查找其它资料。</p>
+<p>最后希望本文对大家有所帮助，建议大家系统的学习一下函数式编程(参考链接里有哦)。函数式编程刚开始学起来可能觉得很奇怪，很难看懂，坚持下去，你会爱上它哈哈！</p>
+<h3><a class="anchor" aria-hidden="true" id="参考链接"></a><a href="#参考链接" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>参考链接</h3>
+<ul>
+<li><a href="https://reactjs.org/docs/higher-order-components.html">https://reactjs.org/docs/higher-order-components.html</a></li>
+<li><a href="https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e">https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e</a></li>
+<li><a href="https://github.com/MostlyAdequate/mostly-adequate-guide">https://github.com/MostlyAdequate/mostly-adequate-guide</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>
