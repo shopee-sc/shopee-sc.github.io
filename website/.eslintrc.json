@@ -1,0 +1,6 @@
+{
+  "extends": ["plugin:zero/react"],
+  "rules": {
+    "react/prop-types": "off"
+  }
+}
