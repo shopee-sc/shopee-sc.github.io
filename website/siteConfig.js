@@ -8,7 +8,7 @@ const siteConfig = {
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
-
+  projectName: 'shopee-sc.github.io',
   // Used for publishing and more
   organizationName: 'shopee-sc',
   // For top-level user or org sites, the organization is still the same.
@@ -88,7 +88,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+  repoUrl: 'https://github.com/shopee-sc/shopee-sc.github.io',
 }
 
 module.exports = siteConfig
