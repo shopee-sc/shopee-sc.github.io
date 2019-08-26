@@ -20,3 +20,5 @@ deploy:
   provider: script
   skip_cleanup: true
   script: yarn run publish-gh-pages
+  on:
+    branch: source
