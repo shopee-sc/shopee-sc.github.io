@@ -2,12 +2,25 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shopee-sc.github.io/blog</id>
     <title>Shopee Supply Chain FE Blog</title>
-    <updated>2019-08-23T06:00:00Z</updated>
+    <updated>2019-09-04T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://shopee-sc.github.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest Shopee Supply Chain FE news and events.</subtitle>
     <logo>https://shopee-sc.github.io/img/favicon.ico</logo>
     <rights>Copyright © 2019 Shopee</rights>
+    <entry>
+        <title type="html"><![CDATA[Promise链式调用原理]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/09/04/promise.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/09/04/promise.html">
+        </link>
+        <updated>2019-09-04T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>Promise 必须为以下三种状态之一：等待态（Pending）、执行态（Fulfilled）和拒绝态（Rejected）。一旦Promise 被 resolve 或 reject，不能再迁移至其他任何状态（即状态 immutable）。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Webpack中的HMR原理]]></title>
         <id>https://shopee-sc.github.io/blog/2019/08/23/hmr.html</id>
