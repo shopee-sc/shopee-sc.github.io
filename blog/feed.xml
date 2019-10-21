@@ -4,7 +4,7 @@
         <title>Shopee Supply Chain FE Blog</title>
         <link>https://shopee-sc.github.io/blog</link>
         <description>The best place to stay up-to-date with the latest Shopee Supply Chain FE news and events.</description>
-        <lastBuildDate>Wed, 04 Sep 2019 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 01 Jan 1970 00:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,18 @@
             <link>https://shopee-sc.github.io/blog</link>
         </image>
         <copyright>Copyright © 2019 Shopee</copyright>
+        <item>
+            <link>https://shopee-sc.github.io/blog/2019/20/21/es6.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/20/21/es6.html</guid>
+            <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+            <description><![CDATA[<hr>
+<p>title: 深入了解强大的 ES6 「 ... 」 运算符
+author: KK
+authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></p>
+<hr>
+<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Promise链式调用原理]]></title>
             <link>https://shopee-sc.github.io/blog/2019/09/04/promise.html</link>

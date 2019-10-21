@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shopee-sc.github.io/blog</id>
     <title>Shopee Supply Chain FE Blog</title>
-    <updated>2019-09-04T06:00:00Z</updated>
+    <updated>1970-01-01T00:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://shopee-sc.github.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest Shopee Supply Chain FE news and events.</subtitle>
     <logo>https://shopee-sc.github.io/img/favicon.ico</logo>
     <rights>Copyright © 2019 Shopee</rights>
+    <entry>
+        <title type="html"/>
+        <id>https://shopee-sc.github.io/blog/2019/20/21/es6.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/20/21/es6.html">
+        </link>
+        <updated>1970-01-01T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<hr>
+<p>title: 深入了解强大的 ES6 「 ... 」 运算符
+author: KK
+authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></p>
+<hr>
+<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+]]></summary>
+        <author>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Promise链式调用原理]]></title>
         <id>https://shopee-sc.github.io/blog/2019/09/04/promise.html</id>

@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Shopee Supply Chain FE · undefined</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="---"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Shopee Supply Chain FE · undefined"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/20/21/es6"/><meta property="og:description" content="---"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6"></a></li><li class="navListItem"><a class="navItem" href="/blog/2019/09/04/promise">Promise链式调用原理</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/08/23/hmr">Webpack中的HMR原理</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/08/22/hoc">如何理解 React 高阶组件(HOC)?</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/20/21/es6"></a></h1><p class="post-meta"> 21, 2019</p><div class="authorBlock"></div></header><div><span><hr>
+<p>title: 深入了解强大的 ES6 「 ... 」 运算符
+author: KK
+authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></p>
+<hr>
+<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+<!--truncate-->
+<p>#背景</p>
+<p><code>...</code> 运算符， 是<code>ES6</code>里一个新引入的运算法， 也叫<code>展开/收集</code> 运算符， 我们每天都要和它打交道。</p>
+<p>这篇文章，我就带你系统的回顾下这个运算符， 介绍一些<code>基础</code>和<code>进阶</code>的用法。</p>
+<p>#基础篇</p>
+<p>先看一下官方描述：</p>
+<blockquote>
+<p>Spread syntax allows an <code>iterable</code>, such as an <code>array expression</code> or <code>string</code>, to be expanded in places where 0 or more <code>arguments</code> or <code>elements</code> are expected or an <code>object expression</code> to be expanded in places where 0 or more key-value pairs (for object literals) are expected.</p>
+</blockquote>
+<p>简而言之就是， <code>...</code>  运算符可以展开一个<code>可迭代</code>对象重的所有项。</p>
+<p>可迭代的对象一般是指可以被循环的， 包括： <code>string</code>, <code>array</code>, <code>set</code>, 等等。</p>
+<p>下面我们来看几个基础的例子来加深理解。</p>
+<h2><a class="anchor" aria-hidden="true" id="基础用法"></a><a href="#基础用法" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法</h2>
+<h3><a class="anchor" aria-hidden="true" id="基础用法1-展开"></a><a href="#基础用法1-展开" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法1: <code>展开</code></h3>
+<pre><code class="hljs css language-js"> <span class="hljs-keyword">const</span> a = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]
+ <span class="hljs-keyword">const</span> b = [<span class="hljs-number">1</span>, ...a, <span class="hljs-number">5</span>]
+
+ b; <span class="hljs-comment">// [1, 2, 3, 4, 5]</span>
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="基础用法2-收集"></a><a href="#基础用法2-收集" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法2: <code>收集</code></h3>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">a, b, ...c</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(a, b, c)     
+}
+foo(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// 1, 2, [3, 4, 5]</span>
+
+</code></pre>
+<p>如果没有命名参数的话， <code>...</code>  就会收集所有的参数：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(args)     
+}
+
+foo(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// [1, 2, 3, 4, 5]</span>
+
+</code></pre>
+<p>关于这个<code>收集</code>的用法, 官方描述：</p>
+<blockquote>
+<p>“A function’s <code>last parameter</code> can be prefixed with ... which will cause all remaining (user supplied) arguments to be placed within a &quot;standard&quot; javascript array. <code>Only the last parameter can be a rest parameter.”</code></p>
+</blockquote>
+<p>这个运算符一定是在最后一个参数的位置， 也很好理解， 就是“收集前面剩下的参数”。</p>
+<blockquote>
+<p>Remember that the rest parameter <code>must be the last parameter</code>, or an <code>error</code> will occur.</p>
+</blockquote>
+<p>如果不在最后一位， 会报错。</p>
+<p>不得不感叹， 这个运算符设计的真的是妙， <code>可展开</code>， <code>可收集</code>， <code>收放自如</code>, 当真<code>好用</code>。</p>
+<h3><a class="anchor" aria-hidden="true" id="基础用法3-把-类数组-转换为-数组"></a><a href="#基础用法3-把-类数组-转换为-数组" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法3: 把<code>类数组</code> 转换为<code>数组</code></h3>
+<p>扩展运算符「<code>...</code>」也可以将某些数据结构转为数组.</p>
+<p>先回顾下什么是<code>类数组</code>吧.</p>
+<p>类数组和数组非常接近， 都可以拥有一系列元素， 也有<code>length</code> 属性， 最大的不同是：</p>
+<p>类数组不具备数组的一系列方法。</p>
+<p>举个例子:</p>
+<p><img src="/img/bVbyD8o" alt="clipboard.png"></p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> nodeList = <span class="hljs-built_in">document</span>.getElementsByClassName(<span class="hljs-string">"test"</span>);
+<span class="hljs-keyword">const</span> array = [...nodeList];
+  
+<span class="hljs-built_in">console</span>.log(nodeList); <span class="hljs-comment">//Result: HTMLCollection [ div.test, div.test ]</span>
+<span class="hljs-built_in">console</span>.log(array); <span class="hljs-comment">//Result: Array [ div.test, div.test ]</span>
+
+</code></pre>
+<p>使用 <code>...</code> 就可以实现类数组到数组的转换， 转换之后， 就可以使用数组的各种方法了。</p>
+<p>你还记得在这个操作符出来之前是如何转换的吗？</p>
+<p>这个问题还是头条的一个前端<code>面试题</code>。</p>
+<p>看例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// ES5 时代</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+  
+   <span class="hljs-comment">// 调用push 加几个元素</span>
+  args.push(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+
+  <span class="hljs-comment">// 把args 作为参数传递给foo</span>
+  foo.apply(<span class="hljs-literal">null</span>, args)
+
+}
+
+<span class="hljs-comment">// ES6 时代</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">...args</span>) </span>{ <span class="hljs-comment">// 搜集参数到 args</span>
+   
+  args.push(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
+  
+  <span class="hljs-built_in">console</span>.log(...args) <span class="hljs-comment">// 展开args</span>
+
+}
+
+bar(<span class="hljs-number">0</span>); <span class="hljs-comment">// 0 1 2 3 4 5 6</span>
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="基础用法4-增加元素或属性"></a><a href="#基础用法4-增加元素或属性" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法4: <code>增加元素或属性</code></h3>
+<h4><a class="anchor" aria-hidden="true" id="1-为数组新增成员"></a><a href="#1-为数组新增成员" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1: 为数组新增成员</h4>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = [<span class="hljs-string">'KK'</span>, <span class="hljs-string">'Peter'</span>];
+<span class="hljs-keyword">const</span> charmander = <span class="hljs-string">'郑伊健'</span>;
+
+<span class="hljs-keyword">const</span> pokedex = [...pokemon, charmander];
+
+<span class="hljs-built_in">console</span>.log(pokedex); 
+
+<span class="hljs-comment">//Result: [ 'KK', 'Peter', '郑伊健' ]</span>
+
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="2-为对象新增属性"></a><a href="#2-为对象新增属性" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2: 为对象新增属性</h4>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> basicSquirtle = { <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span> };
+<span class="hljs-keyword">const</span> fullSquirtle = {
+  ...basicSquirtle,
+  <span class="hljs-attr">species</span>: <span class="hljs-string">'Tiny Turtle'</span>,
+  <span class="hljs-attr">evolution</span>: <span class="hljs-string">'Wartortle'</span>
+};
+
+<span class="hljs-built_in">console</span>.log(fullSquirtle); 
+
+<span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water', species: 'Tiny Turtle', evolution: 'Wartortle' }</span>
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="基础用法5-合并数组-对象"></a><a href="#基础用法5-合并数组-对象" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基础用法5: <code>合并数组/对象</code></h3>
+<h4><a class="anchor" aria-hidden="true" id="合并数组"></a><a href="#合并数组" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>合并数组：</h4>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = [<span class="hljs-string">'Squirtle'</span>, <span class="hljs-string">'Bulbasur'</span>, <span class="hljs-string">'Charmander'</span>];
+<span class="hljs-keyword">const</span> morePokemon = [<span class="hljs-string">'Totodile'</span>, <span class="hljs-string">'Chikorita'</span>, <span class="hljs-string">'Cyndaquil'</span>];
+
+<span class="hljs-keyword">const</span> pokedex = [...pokemon, ...morePokemon];
+
+<span class="hljs-built_in">console</span>.log(pokedex); 
+<span class="hljs-comment">//Result: [ 'Squirtle', 'Bulbasur', 'Charmander', 'Totodile', 'Chikorita', 'Cyndaquil' ]</span>
+
+
+
+<span class="hljs-comment">// 对象数组也一样：</span>
+<span class="hljs-keyword">const</span> pokemon = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Bulbasur'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'Plant'</span> }
+];
+<span class="hljs-keyword">const</span> morePokemon = [{ <span class="hljs-attr">name</span>: <span class="hljs-string">'Charmander'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'Fire'</span> }];
+
+<span class="hljs-keyword">const</span> pokedex = [...pokemon, ...morePokemon];
+
+<span class="hljs-built_in">console</span>.log(pokedex); 
+
+<span class="hljs-comment">//Result: [ { name: 'Squirtle', type: 'Water' }, { name: 'Bulbasur', type: 'Plant' }, { name: 'Charmander', type: 'Fire' } ]</span>
+
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="合并对象"></a><a href="#合并对象" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>合并对象</h4>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> baseSquirtle = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>
+};
+
+<span class="hljs-keyword">const</span> squirtleDetails = {
+  <span class="hljs-attr">species</span>: <span class="hljs-string">'Tiny Turtle Pokemon'</span>,
+  <span class="hljs-attr">evolution</span>: <span class="hljs-string">'Wartortle'</span>
+};
+
+<span class="hljs-keyword">const</span> squirtle = { ...baseSquirtle, ...squirtleDetails };
+<span class="hljs-built_in">console</span>.log(squirtle); 
+<span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water', species: 'Tiny Turtle Pokemon', evolution: 'Wartortle' }</span>
+
+
+</code></pre>
+<p>以上是一些基础费用法</p>
+<p>下面介绍一些<code>...</code> 操作符的进阶用法。</p>
+<p>#进阶篇</p>
+<h2><a class="anchor" aria-hidden="true" id="1-复制具有嵌套结构的数据-对象"></a><a href="#1-复制具有嵌套结构的数据-对象" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. 复制具有嵌套结构的数据/对象</h2>
+<p>先看一个例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>,
+  <span class="hljs-attr">abilities</span>: [<span class="hljs-string">'Torrent'</span>, <span class="hljs-string">'Rain Dish'</span>]
+};
+
+<span class="hljs-keyword">const</span> squirtleClone = { ...pokemon };
+
+pokemon.name = <span class="hljs-string">'Charmander'</span>;
+pokemon.abilities.push(<span class="hljs-string">'Surf'</span>);
+
+<span class="hljs-built_in">console</span>.log(squirtleClone); 
+
+<span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water', abilities: [ 'Torrent', 'Rain Dish', 'Surf' ] }</span>
+
+
+</code></pre>
+<p>当我们修改<code>原对象</code>的<code>name</code> 属性时，我们的<code>克隆对象</code>的 <code>name</code> 属性<code>没有受影响</code>， 这是符合我们预期的。</p>
+<p>但是当<code>修改原对象</code>的<code>abilities</code> 属性时，我们的<code>克隆对象也被修改</code>了。</p>
+<p>原因也很简单， 因为复制过来的abilities 是一个引用类型， 原数据改了， 用到他的地方也会跟着改。</p>
+<p>知道原因，再解决就很简单了， 两种方式：</p>
+<h3><a class="anchor" aria-hidden="true" id="1-复制引用类型的数据"></a><a href="#1-复制引用类型的数据" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1: 复制引用类型的数据</h3>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>,
+  <span class="hljs-attr">abilities</span>: [<span class="hljs-string">'Torrent'</span>, <span class="hljs-string">'Rain Dish'</span>]
+};
+
+<span class="hljs-keyword">const</span> squirtleClone = { ...pokemon, <span class="hljs-attr">abilities</span>: [...pokemon.abilities] };
+
+pokemon.name = <span class="hljs-string">'Charmander'</span>;
+pokemon.abilities.push(<span class="hljs-string">'Surf'</span>);
+
+<span class="hljs-built_in">console</span>.log(squirtleClone); 
+
+<span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water', abilities: [ 'Torrent', 'Rain Dish' ] }</span>
+
+
+</code></pre>
+<p>这样就OK了</p>
+<h3><a class="anchor" aria-hidden="true" id="2-深克隆"></a><a href="#2-深克隆" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2: 深克隆</h3>
+<p>在这里就不多解释了。</p>
+<h2><a class="anchor" aria-hidden="true" id="2-增加条件属性"></a><a href="#2-增加条件属性" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2: 增加条件属性</h2>
+<p>顾名思义， 就是需要根据条件添加的属性。</p>
+<p>看个例子：</p>
+<pre><code class="hljs css language-js">
+<span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>
+};
+
+<span class="hljs-keyword">const</span> abilities = [<span class="hljs-string">'Torrent'</span>, <span class="hljs-string">'Rain dish'</span>];
+<span class="hljs-keyword">const</span> fullPokemon = abilities ? { ...pokemon, abilities } : pokemon;
+
+<span class="hljs-built_in">console</span>.log(fullPokemon);
+
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="3-短路"></a><a href="#3-短路" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3: 短路</h2>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>
+};
+
+<span class="hljs-keyword">const</span> abilities = [<span class="hljs-string">'Torrent'</span>, <span class="hljs-string">'Rain dish'</span>];
+<span class="hljs-keyword">const</span> fullPokemon = {
+  ...pokemon,
+  ...(abilities &amp;&amp; { abilities })
+};
+
+<span class="hljs-built_in">console</span>.log(fullPokemon);
+
+</code></pre>
+<p>如果 <code>abilities</code> 为 <code>true</code>， 就相当于是</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> fullPokemon = {
+  ...pokemon,
+  ...{ abilities }
+}
+
+</code></pre>
+<p>这也是一个很有用的技巧。</p>
+<p>##3: 默认结构和添加默认属性</p>
+<h3><a class="anchor" aria-hidden="true" id="默认解构"></a><a href="#默认解构" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>默认解构：</h3>
+<p>我们知道， 当结构一个对象的时候， 如果这个对象里没有某个属性， 解出来是<code>undefined</code>, 我们可以添加默认值来解决：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>
+};
+
+<span class="hljs-keyword">const</span> { type, name } = pokemon;
+<span class="hljs-built_in">console</span>.log(name); <span class="hljs-comment">//Result: Squirtle</span>
+<span class="hljs-built_in">console</span>.log(type); <span class="hljs-comment">//Result: undefined</span>
+
+<span class="hljs-comment">//Assigning default value to the type variable</span>
+<span class="hljs-keyword">const</span> { type = <span class="hljs-string">'Water'</span>, name } = pokemon;
+<span class="hljs-built_in">console</span>.log(type); <span class="hljs-comment">//Result: Water</span>
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="添加默认属性"></a><a href="#添加默认属性" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>添加默认属性</h3>
+<p>有时候从我们会遇到这样的情况， 一个对象， 大部分属性是相似的，只有小部分是不不同的，这时候我们就可以设置一个基础对象， 具备基础属性，  其他的对象可以通过扩展这个对象来得到。</p>
+<p>看例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> pokemon = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>
+};
+
+<span class="hljs-comment">//  给abilities默认赋值</span>
+<span class="hljs-keyword">const</span> { abilities = [], ...rest } = pokemon;
+
+<span class="hljs-keyword">const</span> fullSquirtle = { ...rest, abilities };
+
+<span class="hljs-built_in">console</span>.log(rest); <span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water' }</span>
+<span class="hljs-built_in">console</span>.log({ fullSquirtle }); <span class="hljs-comment">//Result: { name: 'Squirtle', type: 'Water', abilities: [] }</span>
+
+</code></pre>
+<p>这里就是通过 <code>展开 rest</code>, 合并 <code>abilities</code> 得到完全体的数据。</p>
+<p>如果有批量的数据需要处理，这种方法也非常方便：</p>
+<pre><code class="hljs css language-js">
+<span class="hljs-keyword">const</span> pokemon = [
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Charmander'</span>,
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'Fire'</span>
+  },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Squirtle'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'Water'</span>, <span class="hljs-attr">abilities</span>: [<span class="hljs-string">'Torrent'</span>, <span class="hljs-string">'Rain Dish'</span>] },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Bulbasur'</span>,
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'Plant'</span>
+  }
+];
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setDefaultAbilities</span>(<span class="hljs-params">object</span>) </span>{
+  <span class="hljs-keyword">const</span> { abilities = [], ...rest } = object;
+  <span class="hljs-keyword">return</span> { ...rest, abilities };
+}
+
+<span class="hljs-comment">// Applying the setDefaultAbilities function to all the pokemon in the array:</span>
+<span class="hljs-keyword">const</span> normalizedPokemon = pokemon.map(<span class="hljs-function"><span class="hljs-params">pokemon</span> =&gt;</span> setDefaultAbilities(pokemon));
+
+<span class="hljs-built_in">console</span>.log(normalizedPokemon);
+
+<span class="hljs-comment">//Result: [ { name: 'Charmander', type: 'Fire', abilities: [] },   { name: 'Squirtle', type: 'Water', abilities: [ 'Torrent', 'Rain Dish' ] }, { name: 'Bulbasur', type: 'Plant', abilities: [] } ]</span>
+
+</code></pre>
+<p>这样迭代一遍， 所有的对象就都具备 <code>abilities</code> 属性了。</p>
+<h2><a class="anchor" aria-hidden="true" id="总结"></a><a href="#总结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>总结</h2>
+<p><code>...</code> 运算符非常灵活， 收放自如，非常强大， 希望我们都能很好的掌握这个工具。</p>
+<p>内容就这么多，希望对大家有所帮助， 如有纰漏， 欢迎指正。</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#基础用法">基础用法</a><ul class="toc-headings"><li><a href="#基础用法1-展开">基础用法1: <code>展开</code></a></li><li><a href="#基础用法2-收集">基础用法2: <code>收集</code></a></li><li><a href="#基础用法3-把类数组-转换为数组">基础用法3: 把<code>类数组</code> 转换为<code>数组</code></a></li><li><a href="#基础用法4-增加元素或属性">基础用法4: <code>增加元素或属性</code></a></li><li><a href="#基础用法5-合并数组-对象">基础用法5: <code>合并数组/对象</code></a></li></ul></li><li><a href="#1-复制具有嵌套结构的数据-对象">1. 复制具有嵌套结构的数据/对象</a><ul class="toc-headings"><li><a href="#1-复制引用类型的数据">1: 复制引用类型的数据</a></li><li><a href="#2-深克隆">2: 深克隆</a></li></ul></li><li><a href="#2-增加条件属性">2: 增加条件属性</a></li><li><a href="#3-短路">3: 短路</a><ul class="toc-headings"><li><a href="#默认解构">默认解构：</a></li><li><a href="#添加默认属性">添加默认属性</a></li></ul></li><li><a href="#总结">总结</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>
