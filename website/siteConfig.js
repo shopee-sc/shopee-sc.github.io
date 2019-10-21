@@ -1,6 +1,5 @@
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
-
 const siteConfig = {
   title: 'Shopee Supply Chain FE', // Title for your website.
   url: 'https://shopee-sc.github.io', // Your website URL
