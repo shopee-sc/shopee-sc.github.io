@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Chorme 浏览器中的垃圾回收和内存泄漏 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="总结了Chorme 浏览器中的垃圾回收和内存泄漏。"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Chorme 浏览器中的垃圾回收和内存泄漏 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/10/23/broswer-3"/><meta property="og:description" content="总结了Chorme 浏览器中的垃圾回收和内存泄漏。"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6"></a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/25/css">CSS 使用技巧总结</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/10/23/broswer-3">Chorme 浏览器中的垃圾回收和内存泄漏</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/22/webpack">Webpack 性能优化总结大全</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/10/23/broswer-3">Chorme 浏览器中的垃圾回收和内存泄漏</a></h1><p class="post-meta">October 23, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>总结了Chorme 浏览器中的垃圾回收和内存泄漏。</p>
+<!--truncate-->
+<h4><a class="anchor" aria-hidden="true" id="垃圾回收"></a><a href="#垃圾回收" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>垃圾回收</h4>
+<p>通常情况下，垃圾数据回收分为<code>手动回收</code>和<code>自动回收</code>两种策略。</p>
+<p>手动回收策略，何时分配内存、何时销毁内存都是由代码控制的。
+自动回收策略，产生的垃圾数据是由垃圾回收器来释放的，并不需要手动通过代码来释放。</p>
+<h5><a class="anchor" aria-hidden="true" id="javascript-中调用栈中的数据回收"></a><a href="#javascript-中调用栈中的数据回收" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JavaScript 中调用栈中的数据回收</h5>
+<p>JavaScript 引擎会通过向下移动 ESP(记录当前执行状态的指针) 来销毁该函数保存在栈中的执行上下文。</p>
+<h5><a class="anchor" aria-hidden="true" id="javascript-堆中的数据回收"></a><a href="#javascript-堆中的数据回收" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JavaScript 堆中的数据回收</h5>
+<p>在 V8 中会把堆分为<code>新生代</code>和<code>老生代</code>两个区域，新生代中存放的是生存时间短的对象，老生代中存放的生存时间久的对象。</p>
+<p>新生区通常只支持 1～8M 的容量，而老生区支持的容量就大很多了。对于这两块区域，V8 分别使用两个不同的垃圾回收器，以便更高效地实施垃圾回收。</p>
+<ul>
+<li>副垃圾回收器，主要负责新生代的垃圾回收。</li>
+<li>主垃圾回收器，主要负责老生代的垃圾回收。</li>
+</ul>
+<p>不论什么类型的垃圾回收器，它们都有一套共同的执行流程。</p>
+<ol>
+<li>第一步是标记空间中活动对象和非活动对象。所谓活动对象就是还在使用的对象，非活动对象就是可以进行垃圾回收的对象。</li>
+<li>第二步是回收非活动对象所占据的内存。其实就是在所有的标记完成之后，统一清理内存中所有被标记为可回收的对象。</li>
+<li>第三步是做内存整理。一般来说，频繁回收对象后，内存中就会存在大量不连续空间，我们把这些不连续的内存空间称为<code>内存碎片</code>，。当内存中出现了大量的内存碎片之后，如果需要分配较大连续内存的时候，就有可能出现内存不足的情况。所以最后一步需要整理这些内存碎片。(这步其实是可选的，因为有的垃圾回收器不会产生内存碎片).</li>
+</ol>
+<h5><a class="anchor" aria-hidden="true" id="新生代中垃圾回收"></a><a href="#新生代中垃圾回收" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>新生代中垃圾回收</h5>
+<p>新生代中用<code>Scavenge 算法</code>来处理，把新生代空间对半划分为两个区域，一半是对象区域，一半是空闲区域。新加入的对象都会存放到对象区域，当对象区域快被写满时，就需要执行一次垃圾清理操作。</p>
+<p>在垃圾回收过程中，首先要对对象区域中的垃圾做标记；标记完成之后，就进入垃圾清理阶段，副垃圾回收器会把这些存活的对象复制到空闲区域中，同时它还会把这些对象有序地排列起来，所以这个复制过程，也就相当于完成了内存整理操作，复制后空闲区域就没有内存碎片了。</p>
+<p>完成复制后，对象区域与空闲区域进行角色翻转，也就是原来的对象区域变成空闲区域，原来的空闲区域变成了对象区域。这样就完成了垃圾对象的回收操作，同时这种<code>角色翻转的操作还能让新生代中的这两块区域无限重复使用下去.</code></p>
+<p>为了执行效率，一般新生区的空间会被设置得比较小,也正是因为新生区的空间不大，所以很容易被存活的对象装满整个区域。为了解决这个问题，JavaScript 引擎采用了<code>对象晋升策略</code>,也就是经过两次垃圾回收依然还存活的对象，会被移动到老生区中。</p>
+<h5><a class="anchor" aria-hidden="true" id="老生代中的垃圾回收"></a><a href="#老生代中的垃圾回收" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>老生代中的垃圾回收</h5>
+<p>老生代中用<code>标记 - 清除（Mark-Sweep）</code>的算法来处理。首先是标记过程阶段，标记阶段就是从一组根元素开始，递归遍历这组根元素(遍历调用栈)，在这个遍历过程中，能到达的元素称为<code>活动对象</code>,没有到达的元素就可以判断为<code>垃圾数据</code>.然后在遍历过程中标记，标记完成后就进行清除过程。它和副垃圾回收器的垃圾清除过程完全不同，这个的清楚过程是删除标记数据。</p>
+<p>清除算法后，会产生大量不连续的内存碎片。而碎片过多会导致大对象无法分配到足够的连续内存，于是又产生了<code>标记 - 整理（Mark-Compact）</code>算法，这个标记过程仍然与<code>标记 - 清除算法</code>里的是一样的，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存，从而让存活对象占用连续的内存块。</p>
+<h5><a class="anchor" aria-hidden="true" id="全停顿"></a><a href="#全停顿" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>全停顿</h5>
+<p>由于 JavaScript 是运行在主线程之上的，一旦执行垃圾回收算法，都需要将正在执行的 JavaScript 脚本暂停下来，待垃圾回收完毕后再恢复脚本执行。我们把这种行为叫做<code>全停顿</code>。</p>
+<p>在 V8 新生代的垃圾回收中，因其空间较小，且存活对象较少，所以全停顿的影响不大，但老生代就不一样了。如果执行垃圾回收的过程中，占用主线程时间过久，主线程是不能做其他事情的。比如页面正在执行一个 JavaScript 动画，因为垃圾回收器在工作，就会导致这个动画在垃圾回收过程中无法执行，这将会造成页面的卡顿现象。</p>
+<p>为了降低老生代的垃圾回收而造成的卡顿，V8 将标记过程分为一个个的子标记过程，同时让垃圾回收标记和 JavaScript 应用逻辑交替进行，直到标记阶段完成，我们把这个算法称为<code>增量标记（Incremental Marking）算法</code>.</p>
+<p>使用增量标记算法，可以把一个完整的垃圾回收任务拆分为很多小的任务，这些小的任务执行时间比较短，可以穿插在其他的 JavaScript 任务中间执行，这样当执行上述动画效果时，就不会让用户因为垃圾回收任务而感受到页面的卡顿了。</p>
+<h3><a class="anchor" aria-hidden="true" id="内存泄漏"></a><a href="#内存泄漏" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存泄漏</h3>
+<p>不再用到的内存，没有及时释放，就叫做内存泄漏（memory leak）。</p>
+<h4><a class="anchor" aria-hidden="true" id="内存泄漏发生的原因"></a><a href="#内存泄漏发生的原因" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存泄漏发生的原因</h4>
+<ol>
+<li>缓存</li>
+</ol>
+<p>有时候为了方便数据的快捷复用，我们会使用缓存,但是缓存必须有一个大小上限才有用。高内存消耗将会导致缓存突破上限，因为缓存内容无法被回收。</p>
+<ol start="2">
+<li><p>队列消费不及时
+当浏览器队列消费不及时时，会导致一些作用域变量得不到及时的释放，因而导致内存泄漏。</p></li>
+<li><p>全局变量</p></li>
+</ol>
+<p>除了常规设置了比较大的对象在全局变量中，还可能是意外导致的全局变量，如：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">arg</span>) </span>{
+    bar = <span class="hljs-string">"this is a hidden global variable"</span>;
+}
+</code></pre>
+<p>在函数中，没有使用 var/let/const 定义变量，这样实际上是定义在<code>window</code>上面，变成了<code>window.bar</code>。
+再比如由于<code>this</code>导致的全局变量：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">this</span>.bar = <span class="hljs-string">"this is a hidden global variable"</span>;
+}
+foo()
+</code></pre>
+<p>这种函数，在window作用域下被调用时，函数里面的<code>this</code>指向了<code>window</code>,执行时实际上为<code>window.bar=xxx</code>,这样也产生了全局变量。</p>
+<ol start="4">
+<li>计时器中引用没有清除</li>
+</ol>
+<p>先看如下代码：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> someData = getData();
+setInterval(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">var</span> node = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'Node'</span>);
+    <span class="hljs-keyword">if</span>(node) {
+        node.innerHTML = <span class="hljs-built_in">JSON</span>.stringify(someData));
+    }
+}, <span class="hljs-number">1000</span>);
+</code></pre>
+<p>这里定义了一个计时器，每隔1s把一些数据写到Node节点里面。但是当这个Node节点被删除后，这里的逻辑其实都不需要了，可是这样写，却导致了计时器里面的回调函数无法被回收，同时，someData里的数据也是无法被回收的。</p>
+<ol start="5">
+<li>闭包</li>
+</ol>
+<p>看以下这个闭包：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">var</span> theThing = <span class="hljs-literal">null</span>;
+<span class="hljs-keyword">var</span> replaceThing = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> originalThing = theThing;
+  <span class="hljs-keyword">var</span> unused = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">if</span> (originalThing)
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"hi"</span>);
+  };
+  theThing = {
+    <span class="hljs-attr">longStr</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">1000000</span>).join(<span class="hljs-string">'*'</span>),
+    <span class="hljs-attr">someMethod</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-built_in">console</span>.log(someMessage);
+    }
+  };
+};
+setInterval(replaceThing, <span class="hljs-number">1000</span>);
+</code></pre>
+<p>每次调用 <code>replaceThing</code> ，<code>theThing</code> 会创建一个大数组和一个新闭包（someMethod）的新对象。同时，变量 <code>unused</code> 是一个引用 <code>originalThing(theThing)</code> 的闭包，闭包的作用域一旦创建，它们有同样的父级作用域，作用域是共享的。</p>
+<p>即 <code>someMethod</code> 可以通过 <code>theThing</code> 使用，<code>someMethod</code> 与 <code>unused</code> 分享闭包作用域，尽管 <code>unused</code> 从未使用，它引用的 <code>originalThing</code> 迫使它保留在内存中（防止被回收）。</p>
+<p>因此，当这段代码反复运行，就会看到内存占用不断上升，垃圾回收器（GC）并无法降低内存占用。</p>
+<p>本质上，闭包的链表已经创建，每一个闭包作用域携带一个指向大数组的间接的引用，造成严重的内存泄漏。</p>
+<ol start="6">
+<li>事件监听</li>
+</ol>
+<p>例如，Node.js 中 Agent 的 keepAlive 为 true 时，可能造成的内存泄漏。当 Agent keepAlive 为 true 的时候，将会复用之前使用过的 socket，如果在 socket 上添加事件监听，忘记清除的话，因为 socket 的复用，将导致事件重复监听从而产生内存泄漏。</p>
+<h4><a class="anchor" aria-hidden="true" id="内存泄漏的识别方法"></a><a href="#内存泄漏的识别方法" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存泄漏的识别方法</h4>
+<ol>
+<li>使用 Chrome 任务管理器实时监视内存使用
+打开 chrome 浏览器，点击右上角主菜单，选择<code>更多工具-&gt;任务管理器</code>，这样就开启了任务管理器面板，然后再右键点击任务管理器的表格标题并启用 JavaScript使用的内存，能看到这样的面板：</li>
+</ol>
+<p>下面两列可以告诉您与页面的内存使用有关的不同信息：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/memory/WechatIMG123.png" alt="GitHub"></p>
+<ol>
+<li><code>内存占用空间(Memory)</code> 列表示原生内存。DOM 节点存储在原生内存中。 如果此值正在增大，则说明正在创建 DOM 节点。</li>
+<li><code>JavaScript使用的内存(JavaScript Memory)</code> 列表示 JS 堆。此列包含两个值。 您感兴趣的值是实时数字（括号中的数字）。实时数字表示您的页面上的可到达对象正在使用的内存量。 如果此数字在增大，要么是正在创建新对象，要么是现有对象正在增长。</li>
+</ol>
+<p>当你页面稳定下来之后，这两个的值还在上涨，你就可以查一查是否内存泄漏了。</p>
+<ol start="2">
+<li>利用chrome 时间轴记录可视化内存泄漏</li>
+</ol>
+<p>Performance(时间轴)能够面板直观实时显示JS内存使用情况、节点数量、监听器数量等。</p>
+<p>打开 chrome 浏览器，调出调试面板(DevTools),点击<code>Performance</code>选项(低版本是Timeline)，勾选Memory复选框。一种比较好的做法是使用强制垃圾回收开始和结束记录。在记录时点击 Collect garbage 按钮 (强制垃圾回收按钮) 可以强制进行垃圾回收。
+所以录制顺序可以这样：开始录制前先点击垃圾回收--&gt;点击开始录制--&gt;点击垃圾回收--&gt;点击结束录制。
+面板介绍如图：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/memory/WechatIMG124.png" alt="GitHub">
+录制结果如图：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/memory/WechatIMG125.png" alt="GitHub">
+首先，从图中我们可以看出不同颜色的曲线代表的含义，这里主要关注JS堆内存、节点数量、监听器数量。鼠标移到曲线上，可以在左下角显示具体数据。在实际使用过程中，如果您看到这种 JS 堆大小或节点大小不断增大的模式，则可能存在内存泄漏。</p>
+<ol start="3">
+<li>使用堆快照发现已分离 DOM 树的内存泄漏</li>
+</ol>
+<p>只有页面的 DOM 树或 JavaScript 代码不再引用 DOM 节点时，DOM 节点才会被作为垃圾进行回收。 如果某个节点已从 DOM 树移除，但某些 JavaScript 仍然引用它，我们称此节点为“已分离”，已分离的 DOM 节点是内存泄漏的常见原因。</p>
+<p>同理，调出调试面板，点击<code>Memory</code>，然后选择<code>Heap Snapshot</code>，然后点击进行录制。录制完成后，选中录制结果，在 <code>Class filter</code> 文本框中键入 <code>Detached</code>，搜索已分离的 DOM 树。
+以这段代码为例：</p>
+<pre><code class="hljs css language-js">&lt;html&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"createBtn"</span>&gt;</span>增加节点<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript"> 
+<span class="hljs-keyword">var</span> detachedNodes;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> ul = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'ul'</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+    <span class="hljs-keyword">var</span> li = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'li'</span>);
+    ul.appendChild(li);
+  }
+  detachedTree = ul;
+}
+
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'createBtn'</span>).addEventListener(<span class="hljs-string">'click'</span>, create);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
+</code></pre>
+<p>点击几下，然后记录。可以得到以下信息：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/memory/WechatIMG126.png" alt="GitHub">
+旧版的面板，还会有颜色标注，黄色的对象实例表示它被JS代码引用，红色的对象实例表示被黄色节点引用的游离节点。上图是新版本的，不会有颜色标识。但是还是可以一个个来看，如上图，点开节点，可以看到下面的引用信息，上面可以看出，有个HTMLUListElement(ul节点)被window.detachedNodes引用。再结合代码，原来是没有加var/let/const声明，导致其成了全局变量,所以DOM无法释放。</p>
+<ol start="4">
+<li>按函数调查内存分配
+打开面板，点击<code>JavaScript Profiler</code>,如果没看到这个选项，你可以点调试面板右上角的三个点，选择<code>more tools</code>，然后选择。</li>
+</ol>
+<p>ps: chrome 旧版的浏览器，这个功能在 <code>Profiles</code> 里面，点<code>Record Allocation Profile</code>即可.</p>
+<p>操作步骤：点start-&gt;在页面进行你要检测的操作-&gt;点stop。
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/memory/WechatIMG127.png" alt="GitHub">
+DevTools 按函数显示内存分配明细。默认视图为 Heavy (Bottom Up)，将分配了最多内存的函数显示在最上方，还有函数的位置，你可以看看是哪些函数占用内存较多。</p>
+<h4><a class="anchor" aria-hidden="true" id="避免内存泄漏的方法"></a><a href="#避免内存泄漏的方法" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>避免内存泄漏的方法</h4>
+<ol>
+<li>少用全局变量，避免意外产生全局变量</li>
+<li>使用闭包要及时注意，有Dom元素的引用要及时清理。</li>
+<li>计时器里的回调没用的时候要记得销毁。</li>
+<li>为了避免疏忽导致的遗忘，我们可以使用 <code>WeakSet</code> 和 <code>WeakMap</code>结构，它们对于值的引用都是不计入垃圾回收机制的，表示这是弱引用。
+举个例子：</li>
+</ol>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> wm = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
+
+<span class="hljs-keyword">const</span> element = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'example'</span>);
+
+wm.set(element, <span class="hljs-string">'some information'</span>);
+wm.get(element) <span class="hljs-comment">// "some information"</span>
+</code></pre>
+<p>这种情况下，一旦消除对该节点的引用，它占用的内存就会被垃圾回收机制释放。Weakmap 保存的这个键值对，也会自动消失。</p>
+<p>基本上，如果你要往对象上添加数据，又不想干扰垃圾回收机制，就可以使用 WeakMap。</p>
+<h3><a class="anchor" aria-hidden="true" id="参考资料"></a><a href="#参考资料" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>参考资料</h3>
+<ul>
+<li>极客时间《浏览器工作原理与实践》</li>
+<li><a href="https://jinlong.github.io/2016/05/01/4-Types-of-Memory-Leaks-in-JavaScript-and-How-to-Get-Rid-Of-Them/">https://jinlong.github.io/2016/05/01/4-Types-of-Memory-Leaks-in-JavaScript-and-How-to-Get-Rid-Of-Them/</a></li>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/memory-problems?hl=zh-cn">https://developers.google.com/web/tools/chrome-devtools/memory-problems?hl=zh-cn</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

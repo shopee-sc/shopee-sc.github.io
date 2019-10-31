@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Git 场景问题及解决方法总结 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="总结了一些Git 场景问题及解决方法"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Git 场景问题及解决方法总结 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/10/30/git"/><meta property="og:description" content="总结了一些Git 场景问题及解决方法"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6"></a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/25/css">CSS 使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/23/broswer-3">Chorme 浏览器中的垃圾回收和内存泄漏</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/22/webpack">Webpack 性能优化总结大全</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></h1><p class="post-meta">October 30, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>总结了一些Git 场景问题及解决方法</p>
+<!--truncate-->
+<h3><a class="anchor" aria-hidden="true" id="放弃某次merge"></a><a href="#放弃某次merge" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>放弃某次merge</h3>
+<p>假如你merge的时候产生了很大的冲突，想先放弃某次merge，你可以：</p>
+<ol>
+<li>git merge --abort 或</li>
+<li>git reset HEAD 或</li>
+<li>git checkout HEAD</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="在非目的分支上做了修改-想切换回目的分支"></a><a href="#在非目的分支上做了修改-想切换回目的分支" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>在非目的分支上做了修改，想切换回目的分支</h3>
+<ul>
+<li>还未添加到暂存区/已添加到暂存区还未提交</li>
+</ul>
+<ol>
+<li>新建临时分支，<code>git checkout -b new_branch</code>，这样改动会被带到新分支。然后把非目的分支的修改用<code>git checkout .</code>恢复。</li>
+<li>先 <code>git stash</code>，然后切换到目的分支(git checkout 【target-branch】)，在目的分支<code>git stash pop</code>即可。这种方式最好理解，就是把改动先放到一个临时区域，让git先别管，到了正确的分支再拿出来。</li>
+</ol>
+<ul>
+<li>已提交到本地仓库</li>
+</ul>
+<p>这种情况就要有reset了，用<code>git reset HEAD^</code>撤销最近一次提交，如果有多次提交的话，查找到对应提交id进行reset就行。git默认的是mixed模式，即撤销暂存区，保留工作区。这样你再切分支也还能把改动带过去。当然加--soft也可以，这样能保留暂存区和工作区。</p>
+<ul>
+<li>已push到远程仓库
+如果很不幸你已经把误修改给push了，你需要用到revert命令，先用<code>git log</code>查找到你误提交的commitId，然后<code>git revert commitId</code>，产生一次逆向提交，来对冲掉之前的。之后再push到远程就可以了。</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="git忽略不提交文件"></a><a href="#git忽略不提交文件" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>git忽略不提交文件</h3>
+<ul>
+<li>从未提交过的文件</li>
+</ul>
+<p>这种最简单，直接把想忽略的文件加入<code>.gitignore</code>中忽略提交即可.</p>
+<ul>
+<li>已经推送（push）过的文件</li>
+</ul>
+<p>已经推送（push）过的文件，想删除本地文件，并将删除这个操作更新到远程文件，</p>
+<pre><code class="hljs css language-js">git rm -r --cached .
+git add .
+git commit -m <span class="hljs-string">'update .gitignore'</span>
+git push -u origin master
+</code></pre>
+<p>已经推送（push）过的文件，想从git远程库中删除，并在以后的提交中忽略，但是却还想在本地保留这个文件,可以使用</p>
+<pre><code class="hljs css language-js">$git rm --cached pages/index.wxml 
+</code></pre>
+<p>已经推送（push）过的文件，想在以后的提交时忽略此文件(即使本地对该文件修改过也不同提交新修改)，并且不删除git远程库中相应文件，可以使用</p>
+<pre><code class="hljs css language-js">$git update-index --assume-unchanged pages/index.wxml 
+</code></pre>
+<p>如果要忽略的是一个目录,则打开 git bash，cd到 目标目录下</p>
+<pre><code class="hljs css language-js">$git update-index --assume-unchanged $(git ls-files | tr <span class="hljs-string">'\n'</span> <span class="hljs-string">' '</span>) 
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="提交分支代码"></a><a href="#提交分支代码" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>提交分支代码</h3>
+<ul>
+<li>在当前分支下，第一次push，</li>
+</ul>
+<pre><code class="hljs css language-js">git push --<span class="hljs-keyword">set</span>-upstream origin [branch]
+</code></pre>
+<p>这样设置一次之后，后面就直接<code>git push</code>即可。</p>
+<ul>
+<li>不在当前分支下，</li>
+</ul>
+<pre><code class="hljs css language-js"><span class="hljs-comment">//   git push &lt;远程主机名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt; </span>
+git push origin feature_abc:feature_abc  
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="分支代码操作常用命令"></a><a href="#分支代码操作常用命令" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分支代码操作常用命令</h3>
+<ul>
+<li>列出所有本地分支</li>
+</ul>
+<pre><code class="hljs css language-js">git branch
+</code></pre>
+<ul>
+<li>列出所有远程分支</li>
+</ul>
+<pre><code class="hljs css language-js">git branch -r
+</code></pre>
+<ul>
+<li>列出所有本地分支和远程分支</li>
+</ul>
+<pre><code class="hljs css language-js">git branch -a
+</code></pre>
+<ul>
+<li>新建一个分支，但依然停留在当前分支</li>
+</ul>
+<pre><code class="hljs css language-js">git branch [branch-name]
+</code></pre>
+<ul>
+<li>新建一个分支，并切换到该分支</li>
+</ul>
+<pre><code class="hljs css language-js">git checkout -b [branch]
+</code></pre>
+<ul>
+<li>新建一个分支，与指定的远程分支建立追踪关系</li>
+</ul>
+<pre><code class="hljs css language-js">git branch --track [branch] [remote-branch]
+</code></pre>
+<ul>
+<li>切换到指定分支，并更新工作区</li>
+</ul>
+<pre><code class="hljs css language-js">git checkout [branch-name]
+</code></pre>
+<ul>
+<li>切换到上一个分支</li>
+</ul>
+<pre><code class="hljs css language-js">git checkout -
+</code></pre>
+<ul>
+<li>合并指定分支到当前分支</li>
+</ul>
+<pre><code class="hljs css language-js">git merge [branch]
+</code></pre>
+<ul>
+<li>删除分支</li>
+</ul>
+<pre><code class="hljs css language-js">git branch -d [branch-name]
+</code></pre>
+<ul>
+<li>删除远程分支</li>
+</ul>
+<pre><code class="hljs css language-js">git push origin --<span class="hljs-keyword">delete</span> [branch-name]
+git branch -dr [remote/branch]
+</code></pre>
+<ul>
+<li>拉取所有分支代码</li>
+</ul>
+<pre><code class="hljs css language-js">git fetch
+</code></pre>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

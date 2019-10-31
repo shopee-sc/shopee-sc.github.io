@@ -26,6 +26,54 @@ authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></
 ]]></description>
         </item>
         <item>
+            <title><![CDATA[Git 场景问题及解决方法总结]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/30/git.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/30/git.html</guid>
+            <pubDate>Wed, 30 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了一些Git 场景问题及解决方法</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[CSS 使用技巧总结]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/25/css.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/25/css.html</guid>
+            <pubDate>Fri, 25 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了一些CSS 使用技巧总结。</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Chorme 浏览器中的垃圾回收和内存泄漏]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/23/broswer-3.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/23/broswer-3.html</guid>
+            <pubDate>Wed, 23 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了Chorme 浏览器中的垃圾回收和内存泄漏。</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Webpack 性能优化总结大全]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/22/webpack.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/22/webpack.html</guid>
+            <pubDate>Tue, 22 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了一些性能优化方法</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[浏览器原理总结(二)]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/20/broswer.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/20/broswer.html</guid>
+            <pubDate>Sun, 20 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了一些浏览器相关的原理，主要以问答的形式呈现。</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[浏览器原理总结(一)]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/19/broswer-2.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/19/broswer-2.html</guid>
+            <pubDate>Sat, 19 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>总结了一些浏览器相关的原理，主要以问答的形式呈现。</p>
+]]></description>
+        </item>
+        <item>
             <title><![CDATA[Promise链式调用原理]]></title>
             <link>https://shopee-sc.github.io/blog/2019/09/04/promise.html</link>
             <guid>https://shopee-sc.github.io/blog/2019/09/04/promise.html</guid>

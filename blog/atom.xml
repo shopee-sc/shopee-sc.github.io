@@ -25,6 +25,84 @@ authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[Git 场景问题及解决方法总结]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/30/git.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/30/git.html">
+        </link>
+        <updated>2019-10-30T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了一些Git 场景问题及解决方法</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[CSS 使用技巧总结]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/25/css.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/25/css.html">
+        </link>
+        <updated>2019-10-25T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了一些CSS 使用技巧总结。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Chorme 浏览器中的垃圾回收和内存泄漏]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/23/broswer-3.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/23/broswer-3.html">
+        </link>
+        <updated>2019-10-23T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了Chorme 浏览器中的垃圾回收和内存泄漏。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Webpack 性能优化总结大全]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/22/webpack.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/22/webpack.html">
+        </link>
+        <updated>2019-10-22T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了一些性能优化方法</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浏览器原理总结(二)]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/20/broswer.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/20/broswer.html">
+        </link>
+        <updated>2019-10-20T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了一些浏览器相关的原理，主要以问答的形式呈现。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浏览器原理总结(一)]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/10/19/broswer-2.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/10/19/broswer-2.html">
+        </link>
+        <updated>2019-10-19T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>总结了一些浏览器相关的原理，主要以问答的形式呈现。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Promise链式调用原理]]></title>
         <id>https://shopee-sc.github.io/blog/2019/09/04/promise.html</id>
         <link href="https://shopee-sc.github.io/blog/2019/09/04/promise.html">
