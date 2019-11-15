@@ -14,15 +14,11 @@
         </image>
         <copyright>Copyright © 2019 Shopee</copyright>
         <item>
+            <title><![CDATA[深入了解强大的 ES6 「 ... 」 运算符]]></title>
             <link>https://shopee-sc.github.io/blog/2019/20/21/es6.html</link>
             <guid>https://shopee-sc.github.io/blog/2019/20/21/es6.html</guid>
             <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
-            <description><![CDATA[<hr>
-<p>title: 深入了解强大的 ES6 「 ... 」 运算符
-author: KK
-authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></p>
-<hr>
-<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+            <description><![CDATA[<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
 ]]></description>
         </item>
         <item>

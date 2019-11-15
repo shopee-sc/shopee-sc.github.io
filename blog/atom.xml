@@ -9,19 +9,16 @@
     <logo>https://shopee-sc.github.io/img/favicon.ico</logo>
     <rights>Copyright © 2019 Shopee</rights>
     <entry>
-        <title type="html"/>
+        <title type="html"><![CDATA[深入了解强大的 ES6 「 ... 」 运算符]]></title>
         <id>https://shopee-sc.github.io/blog/2019/20/21/es6.html</id>
         <link href="https://shopee-sc.github.io/blog/2019/20/21/es6.html">
         </link>
         <updated>1970-01-01T00:00:00Z</updated>
-        <summary type="html"><![CDATA[<hr>
-<p>title: 深入了解强大的 ES6 「 ... 」 运算符
-author: KK
-authorURL: <a href="https://github.com/beMySun">https://github.com/beMySun</a></p>
-<hr>
-<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+        <summary type="html"><![CDATA[<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
 ]]></summary>
         <author>
+            <name>KK</name>
+            <uri>https://github.com/beMySun</uri>
         </author>
     </entry>
     <entry>

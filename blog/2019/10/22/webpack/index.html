@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Webpack 性能优化总结大全 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="总结了一些性能优化方法"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Webpack 性能优化总结大全 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/10/22/webpack"/><meta property="og:description" content="总结了一些性能优化方法"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6"></a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/25/css">CSS 使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/23/broswer-3">Chorme 浏览器中的垃圾回收和内存泄漏</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/10/22/webpack">Webpack 性能优化总结大全</a></li></ul></div></div></section></div><script>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Webpack 性能优化总结大全 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="总结了一些性能优化方法"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Webpack 性能优化总结大全 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/10/22/webpack"/><meta property="og:description" content="总结了一些性能优化方法"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6">深入了解强大的 ES6 「 ... 」 运算符</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/25/css">CSS 使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/23/broswer-3">Chorme 浏览器中的垃圾回收和内存泄漏</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/10/22/webpack">Webpack 性能优化总结大全</a></li></ul></div></div></section></div><script>
             var coll = document.getElementsByClassName('collapsible');
             var checkActiveCategory = true;
             for (var i = 0; i < coll.length; i++) {
@@ -63,11 +63,11 @@
             <span class="hljs-attr">module</span> : { 
                 <span class="hljs-attr">rules</span> : [{
                 <span class="hljs-comment">//如果项目源码中只有 文件，就不要写成/\jsx?$/，以提升正则表达式的性能</span>
-                test: <span class="hljs-regexp">/\.js$/</span>, 
+                <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.js$/</span>, 
                 <span class="hljs-comment">//babel -loader 支持缓存转换出的结果，通过 cacheDirectory 选项开启</span>
-                use: [<span class="hljs-string">'babel-loader?cacheDirectory'</span>] , 
+                <span class="hljs-attr">use</span>: [<span class="hljs-string">'babel-loader?cacheDirectory'</span>] , 
                 <span class="hljs-comment">//只对项目根目录下 src 目录中的文件采用 babel-loader</span>
-                include: path.resolve(__dirname,<span class="hljs-string">'src'</span>),
+                <span class="hljs-attr">include</span>: path.resolve(__dirname,<span class="hljs-string">'src'</span>),
                 }],
             }
         }
@@ -94,7 +94,7 @@
 <pre><code class="hljs css language-js">    <span class="hljs-built_in">module</span>.exports = { 
         <span class="hljs-attr">resolve</span>: { 
         <span class="hljs-comment">//只采用 main 字段作为入口文件的描述字段，以减少搜索步骤</span>
-        mainFields: [<span class="hljs-string">'main'</span>]
+        <span class="hljs-attr">mainFields</span>: [<span class="hljs-string">'main'</span>]
         }
     }
 </code></pre>
@@ -110,7 +110,7 @@
         <span class="hljs-attr">resolve</span>: { 
         <span class="hljs-comment">//使用 alias 将导入 react 的语句换成直接使用单独、完整的 react.min.js 文件，</span>
         <span class="hljs-comment">//减少耗时的递归解析操作</span>
-            alias: { 
+            <span class="hljs-attr">alias</span>: { 
                 <span class="hljs-string">'react'</span>: path.resolve( __dirname ,<span class="hljs-string">'./node_modules/react/dist/react.min.js'</span>), 
             }
         }
@@ -127,7 +127,7 @@
 <pre><code class="hljs css language-js">        <span class="hljs-built_in">module</span>.exports = { 
             <span class="hljs-attr">resolve</span> : { 
                 <span class="hljs-comment">//尽可能减少后缀尝试的可能性</span>
-                extensions : [<span class="hljs-string">'js'</span>],
+                <span class="hljs-attr">extensions</span> : [<span class="hljs-string">'js'</span>],
             }
         } 
 </code></pre>
@@ -146,7 +146,7 @@
 
     <span class="hljs-built_in">module</span>.exports = {
         <span class="hljs-comment">// mode: "development || "production",</span>
-        plugins: [
+        <span class="hljs-attr">plugins</span>: [
             <span class="hljs-keyword">new</span> webpack.DllReferencePlugin({
                 <span class="hljs-attr">context</span>: path.join(__dirname, <span class="hljs-string">".."</span>, <span class="hljs-string">"dll"</span>),
                 <span class="hljs-attr">manifest</span>: <span class="hljs-built_in">require</span>(<span class="hljs-string">"../dll/dist/alpha-manifest.json"</span>) <span class="hljs-comment">// eslint-disable-line</span>
@@ -154,7 +154,7 @@
             <span class="hljs-keyword">new</span> webpack.DllReferencePlugin({
                 <span class="hljs-attr">scope</span>: <span class="hljs-string">"beta"</span>,
                 <span class="hljs-attr">manifest</span>: <span class="hljs-built_in">require</span>(<span class="hljs-string">"../dll/dist/beta-manifest.json"</span>), <span class="hljs-comment">// eslint-disable-line</span>
-                extensions: [<span class="hljs-string">".js"</span>, <span class="hljs-string">".jsx"</span>]
+                <span class="hljs-attr">extensions</span>: [<span class="hljs-string">".js"</span>, <span class="hljs-string">".jsx"</span>]
             })
         ]
     };
@@ -178,12 +178,12 @@
     {
         <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.js$/</span>,
         <span class="hljs-comment">// loader: 'babel-loader',</span>
-        loader: <span class="hljs-string">'happypack/loader?id=happy-babel-js'</span>, <span class="hljs-comment">// 增加新的HappyPack构建loader</span>
-        include: [resolve(<span class="hljs-string">'src'</span>)],
+        <span class="hljs-attr">loader</span>: <span class="hljs-string">'happypack/loader?id=happy-babel-js'</span>, <span class="hljs-comment">// 增加新的HappyPack构建loader</span>
+        <span class="hljs-attr">include</span>: [resolve(<span class="hljs-string">'src'</span>)],
         <span class="hljs-attr">exclude</span>: <span class="hljs-regexp">/node_modules/</span>,
     }
     
-    plugins: [
+    <span class="hljs-attr">plugins</span>: [
         <span class="hljs-keyword">new</span> HappyPack({
         <span class="hljs-attr">id</span>: <span class="hljs-string">'happy-babel-js'</span>,
         <span class="hljs-attr">loaders</span>: [<span class="hljs-string">'babel-loader?cacheDirectory=true'</span>],
@@ -200,7 +200,7 @@
 <pre><code class="hljs css language-js">    <span class="hljs-built_in">module</span>.export = { 
         <span class="hljs-attr">watchOptions</span> : { 
             <span class="hljs-comment">//不监听的 node_modules 目录下的文件</span>
-            ignored : <span class="hljs-regexp">/node_modules/</span>, 
+            <span class="hljs-attr">ignored</span> : <span class="hljs-regexp">/node_modules/</span>, 
         }
     }
 </code></pre>
