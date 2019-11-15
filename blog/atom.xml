@@ -22,6 +22,47 @@
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[http2/http3总结]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/11/15/http.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/11/15/http.html">
+        </link>
+        <updated>2019-11-15T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>http2/http3总结</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[setTimeout实现原理和使用注意]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/11/10/setTimeout.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/11/10/setTimeout.html">
+        </link>
+        <updated>2019-11-10T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>setTimeout，它就是一个定时器，用来指定某个函数在多少毫秒之后执行。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[async-await原理解析]]></title>
+        <id>https://shopee-sc.github.io/blog/2019/11/06/async.html</id>
+        <link href="https://shopee-sc.github.io/blog/2019/11/06/async.html">
+        </link>
+        <updated>2019-11-06T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>我们都知道，Promise解决了回调地狱的问题，但是如果遇到复杂的业务，代码里面会包含大量的 then 函数，使得代码依然不是太容易阅读。</p>
+<p>基于这个原因，ES7 引入了 async/await，这是 JavaScript 异步编程的一个重大改进，提供了在不阻塞主线程的情况下使用同步代码实现异步访问资源的能力，并且使得代码逻辑更加清晰，而且还支持 try-catch 来捕获异常，非常符合人的线性思维。</p>
+<p>所以，要研究一下如何实现 async/await。总的来说，async 是Generator函数的语法糖，并对Generator函数进行了改进。</p>
+]]></summary>
+        <author>
+            <name>Winty zhou</name>
+            <uri>https://github.com/LuckyWinty</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Git 场景问题及解决方法总结]]></title>
         <id>https://shopee-sc.github.io/blog/2019/10/30/git.html</id>
         <link href="https://shopee-sc.github.io/blog/2019/10/30/git.html">

@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>async-await原理解析 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="我们都知道，Promise解决了回调地狱的问题，但是如果遇到复杂的业务，代码里面会包含大量的 then 函数，使得代码依然不是太容易阅读。"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="async-await原理解析 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/11/06/async"/><meta property="og:description" content="我们都知道，Promise解决了回调地狱的问题，但是如果遇到复杂的业务，代码里面会包含大量的 then 函数，使得代码依然不是太容易阅读。"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6">深入了解强大的 ES6 「 ... 」 运算符</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/15/http">http2/http3总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/10/setTimeout">setTimeout实现原理和使用注意</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/11/06/async">async-await原理解析</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/10/30/git">Git 场景问题及解决方法总结</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/11/06/async">async-await原理解析</a></h1><p class="post-meta">November 6, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>我们都知道，Promise解决了回调地狱的问题，但是如果遇到复杂的业务，代码里面会包含大量的 then 函数，使得代码依然不是太容易阅读。</p>
+<p>基于这个原因，ES7 引入了 async/await，这是 JavaScript 异步编程的一个重大改进，提供了在不阻塞主线程的情况下使用同步代码实现异步访问资源的能力，并且使得代码逻辑更加清晰，而且还支持 try-catch 来捕获异常，非常符合人的线性思维。</p>
+<p>所以，要研究一下如何实现 async/await。总的来说，async 是Generator函数的语法糖，并对Generator函数进行了改进。</p>
+<!--truncate-->
+<h3><a class="anchor" aria-hidden="true" id="generator函数简介"></a><a href="#generator函数简介" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generator函数简介</h3>
+<p>Generator 函数是一个状态机，封装了多个内部状态。执行 Generator 函数会返回一个遍历器对象，可以依次遍历 Generator 函数内部的每一个状态，但是只有调用<code>next</code>方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。<code>yield</code>表达式就是暂停标志。</p>
+<p>有这样一段代码：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">helloWorldGenerator</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">yield</span> <span class="hljs-string">'hello'</span>;
+  <span class="hljs-keyword">yield</span> <span class="hljs-string">'world'</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'ending'</span>;
+}
+
+<span class="hljs-keyword">var</span> hw = helloWorldGenerator();
+</code></pre>
+<p>调用及运行结果：</p>
+<pre><code class="hljs css language-js">hw.next()<span class="hljs-comment">// { value: 'hello', done: false }</span>
+hw.next()<span class="hljs-comment">// { value: 'world', done: false }</span>
+hw.next()<span class="hljs-comment">// { value: 'ending', done: true }</span>
+hw.next()<span class="hljs-comment">// { value: undefined, done: true }</span>
+</code></pre>
+<p>由结果可以看出，<code>Generator函数</code>被调用时并不会执行，只有当调用<code>next方法</code>、内部指针指向该语句时才会执行，<code>即函数可以暂停，也可以恢复执行</code>。每次调用遍历器对象的next方法，就会返回一个有着<code>value</code>和<code>done</code>两个属性的对象。<code>value</code>属性表示当前的内部状态的值，是yield表达式后面那个表达式的值；<code>done</code>属性是一个布尔值，表示是否遍历结束。</p>
+<h3><a class="anchor" aria-hidden="true" id="generator函数暂停恢复执行原理"></a><a href="#generator函数暂停恢复执行原理" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generator函数暂停恢复执行原理</h3>
+<p>要搞懂函数为何能暂停和恢复，那你首先要了解协程的概念。</p>
+<blockquote>
+<p>一个线程（或函数）执行到一半，可以暂停执行，将执行权交给另一个线程（或函数），等到稍后收回执行权的时候，再恢复执行。这种可以并行执行、交换执行权的线程（或函数），就称为协程。</p>
+</blockquote>
+<p>协程是一种比线程更加轻量级的存在。普通线程是抢先式的，会争夺cpu资源，而协程是合作的，可以把协程看成是跑在线程上的任务，一个线程上可以存在多个协程，但是在线程上同时只能执行一个协程。它的运行流程大致如下：</p>
+<ol>
+<li>协程<code>A</code>开始执行</li>
+<li>协程<code>A</code>执行到某个阶段，进入暂停，执行权转移到协程<code>B</code></li>
+<li>协程<code>B</code>执行完成或暂停，将执行权交还<code>A</code></li>
+<li>协程<code>A</code>恢复执行</li>
+</ol>
+<p>协程遇到<code>yield命令</code>就暂停，等到执行权返回，再从暂停的地方继续往后执行。它的最大优点，就是代码的写法非常像同步操作，如果去除yield命令，简直一模一样。</p>
+<h3><a class="anchor" aria-hidden="true" id="执行器"></a><a href="#执行器" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>执行器</h3>
+<p>通常，我们把执行生成器的代码封装成一个函数，并把这个执行生成器代码的函数称为执行器,<code>co 模块</code>就是一个著名的执行器。</p>
+<p>Generator 是一个异步操作的容器。它的自动执行需要一种机制，当异步操作有了结果，能够自动交回执行权。两种方法可以做到这一点：</p>
+<ol>
+<li>回调函数。将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。</li>
+<li>Promise 对象。将异步操作包装成 Promise 对象，用then方法交回执行权。</li>
+</ol>
+<p>一个基于 Promise 对象的简单自动执行器：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span>(<span class="hljs-params">gen</span>)</span>{
+  <span class="hljs-keyword">var</span> g = gen();
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span>(<span class="hljs-params">data</span>)</span>{
+    <span class="hljs-keyword">var</span> result = g.next(data);
+    <span class="hljs-keyword">if</span> (result.done) <span class="hljs-keyword">return</span> result.value;
+    result.value.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+      next(data);
+    });
+  }
+
+  next();
+}
+</code></pre>
+<p>我们使用时，可以这样使用即可，</p>
+<pre><code class="hljs css language-js">
+<span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">let</span> response1 = <span class="hljs-keyword">yield</span> fetch(<span class="hljs-string">'https://xxx'</span>) <span class="hljs-comment">//返回promise对象</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'response1'</span>)
+    <span class="hljs-built_in">console</span>.log(response1)
+    <span class="hljs-keyword">let</span> response2 = <span class="hljs-keyword">yield</span> fetch(<span class="hljs-string">'https://xxx'</span>) <span class="hljs-comment">//返回promise对象</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'response2'</span>)
+    <span class="hljs-built_in">console</span>.log(response2)
+}
+run(foo);
+</code></pre>
+<p>上面代码中，只要 Generator 函数还没执行到最后一步，next函数就调用自身，以此实现自动执行。通过使用生成器配合执行器，就能实现使用同步的方式写出异步代码了，这样也大大加强了代码的可读性。</p>
+<h3><a class="anchor" aria-hidden="true" id="async-await"></a><a href="#async-await" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>async/await</h3>
+<p>ES7 中引入了 async/await，这种方式能够彻底告别执行器和生成器，实现更加直观简洁的代码。根据 MDN 定义，async 是一个通过异步执行并隐式返回 Promise 作为结果的函数。可以说async 是Generator函数的语法糖，并对Generator函数进行了改进。</p>
+<p>前文中的代码，用<code>async</code>实现是这样：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> foo = <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">let</span> response1 = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'https://xxx'</span>) 
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'response1'</span>)
+    <span class="hljs-built_in">console</span>.log(response1)
+    <span class="hljs-keyword">let</span> response2 = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'https://xxx'</span>) 
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'response2'</span>)
+    <span class="hljs-built_in">console</span>.log(response2)
+}
+</code></pre>
+<p>一比较就会发现，async函数就是将 Generator 函数的星号（*）替换成async，将yield替换成await，仅此而已。</p>
+<p>async函数对 Generator 函数的改进，体现在以下四点：</p>
+<ol>
+<li><code>内置执行器</code>。Generator 函数的执行必须依靠执行器，而 async 函数自带执行器，无需手动执行 next() 方法。</li>
+<li><code>更好的语义</code>。async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。</li>
+<li><code>更广的适用性</code>。co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。</li>
+<li><code>返回值是 Promise</code>。async 函数返回值是 Promise 对象，比 Generator 函数返回的 Iterator 对象方便，可以直接使用 then() 方法进行调用。</li>
+</ol>
+<p>这里的重点是自带了执行器，相当于把我们要额外做的(写执行器/依赖co模块)都封装了在内部。比如：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fn</span>(<span class="hljs-params">args</span>) </span>{
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>等同于：</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fn</span>(<span class="hljs-params">args</span>) </span>{
+  <span class="hljs-keyword">return</span> spawn(<span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// ...</span>
+  });
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">spawn</span>(<span class="hljs-params">genF</span>) </span>{ <span class="hljs-comment">//spawn函数就是自动执行器，跟简单版的思路是一样的，多了Promise和容错处理</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{
+    <span class="hljs-keyword">const</span> gen = genF();
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">step</span>(<span class="hljs-params">nextF</span>) </span>{
+      <span class="hljs-keyword">let</span> next;
+      <span class="hljs-keyword">try</span> {
+        next = nextF();
+      } <span class="hljs-keyword">catch</span>(e) {
+        <span class="hljs-keyword">return</span> reject(e);
+      }
+      <span class="hljs-keyword">if</span>(next.done) {
+        <span class="hljs-keyword">return</span> resolve(next.value);
+      }
+      <span class="hljs-built_in">Promise</span>.resolve(next.value).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">v</span>) </span>{
+        step(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> gen.next(v); });
+      }, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+        step(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> gen.throw(e); });
+      });
+    }
+    step(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> gen.next(<span class="hljs-literal">undefined</span>); });
+  });
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="async-await执行顺序"></a><a href="#async-await执行顺序" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>async/await执行顺序</h3>
+<p>通过上面的分析，我们知道<code>async</code>隐式返回 Promise 作为结果的函数,那么可以简单理解为，await后面的函数执行完毕时，await会产生一个微任务(Promise.then是微任务)。但是我们要注意这个微任务产生的时机，它是执行完await之后，直接跳出async函数，执行其他代码(此处就是协程的运作，A暂停执行，控制权交给B)。其他代码执行完毕后，再回到async函数去执行剩下的代码，然后把await后面的代码注册到微任务队列当中。我们来看个例子：</p>
+<pre><code class="hljs css language-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'script start'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async1</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">await</span> async2()
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'async1 end'</span>)
+}
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async2</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'async2 end'</span>)
+}
+async1()
+
+setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'setTimeout'</span>)
+}, <span class="hljs-number">0</span>)
+
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Promise'</span>)
+resolve()
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'promise1'</span>)
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'promise2'</span>)
+})
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'script end'</span>)
+<span class="hljs-comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span>
+</code></pre>
+<p>分析这段代码：</p>
+<ul>
+<li>执行代码，输出<code>script start</code>。</li>
+<li>执行async1(),会调用async2(),然后输出<code>async2 end</code>,此时将会保留async1函数的上下文，然后跳出async1函数。</li>
+<li>遇到setTimeout，产生一个宏任务</li>
+<li>执行Promise，输出<code>Promise</code>。遇到then，产生第一个微任务</li>
+<li>继续执行代码，输出<code>script end</code></li>
+<li>代码逻辑执行完毕(当前宏任务执行完毕)，开始执行当前宏任务产生的微任务队列，输出<code>promise1</code>，该微任务遇到then，产生一个新的微任务</li>
+<li>执行产生的微任务，输出<code>promise2</code>,当前微任务队列执行完毕。执行权回到async1</li>
+<li>执行await,实际上会产生一个promise返回，即</li>
+</ul>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">let</span> promise_ = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>((resolve,reject){ resolve(<span class="hljs-literal">undefined</span>)})
+</code></pre>
+<p>执行完成，执行await后面的语句，输出<code>async1 end</code></p>
+<ul>
+<li>最后，执行下一个宏任务，即执行setTimeout，输出<code>setTimeout</code></li>
+</ul>
+<h4><a class="anchor" aria-hidden="true" id="注意"></a><a href="#注意" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>注意</h4>
+<p>新版的chrome浏览器中不是如上打印的，因为chrome优化了,await变得更快了,输出为:</p>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</span>
+</code></pre>
+<p>但是这种做法其实是违法了规范的，当然规范也是可以更改的，这是 V8 团队的一个 <a href="https://github.com/tc39/ecma262/pull/1250#issue-197979338">PR</a> ，目前新版打印已经修改。
+知乎上也有相关讨论,可以看看 <a href="https://www.zhihu.com/question/268007969">https://www.zhihu.com/question/268007969</a></p>
+<p>我们可以分2种情况来理解：</p>
+<ol>
+<li><p>如果await 后面直接跟的为一个变量，比如：await 1；这种情况的话相当于直接把await后面的代码注册为一个微任务，可以简单理解为promise.then(await下面的代码)。然后跳出async1函数，执行其他代码，当遇到promise函数的时候，会注册promise.then()函数到微任务队列，注意此时微任务队列里面已经存在await后面的微任务。所以这种情况会先执行await后面的代码（async1 end），再执行async1函数后面注册的微任务代码(promise1,promise2)。</p></li>
+<li><p>如果await后面跟的是一个异步函数的调用，比如上面的代码，将代码改成这样：</p></li>
+</ol>
+<pre><code class="hljs css language-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'script start'</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async1</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">await</span> async2()
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'async1 end'</span>)
+}
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async2</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'async2 end'</span>)
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve().then(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'async2 end1'</span>)
+})
+}
+async1()
+
+setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'setTimeout'</span>)
+}, <span class="hljs-number">0</span>)
+
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Promise'</span>)
+resolve()
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'promise1'</span>)
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'promise2'</span>)
+})
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'script end'</span>)
+</code></pre>
+<p>此时执行完awit并不先把await后面的代码注册到微任务队列中去，而是执行完await之后，直接跳出async1函数，执行其他代码。然后遇到promise的时候，把promise.then注册为微任务。其他代码执行完毕后，需要回到async1函数去执行剩下的代码，然后把await后面的代码注册到微任务队列当中，注意此时微任务队列中是有之前注册的微任务的。所以这种情况会先执行async1函数之外的微任务(promise1,promise2)，然后才执行async1内注册的微任务(async1 end).</p>
+<h3><a class="anchor" aria-hidden="true" id="参考资料"></a><a href="#参考资料" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>参考资料</h3>
+<ul>
+<li>极客时间<a href="https://time.geekbang.org/column/intro/100033601">《浏览器工作原理与实践》</a></li>
+<li>阮一峰<a href="http://es6.ruanyifeng.com/?search=...&amp;x=0&amp;y=0#docs/async">《es6入门》</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="promise资料"></a><a href="#promise资料" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Promise资料</h3>
+<ul>
+<li><a href="https://juejin.im/post/5d6f7c83e51d4561c541a712">《这一次，彻底理解Promise原理》</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>
