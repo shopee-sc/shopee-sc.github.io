@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>npm命令使用技巧总结 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="本文为翻译文章，原文链接：https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12。"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="npm命令使用技巧总结 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/11/19/npm"/><meta property="og:description" content="本文为翻译文章，原文链接：https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12。"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6">深入了解强大的 ES6 「 ... 」 运算符</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/22/rpc">Nodejs之RPC调研</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/11/19/npm">npm命令使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/17/tweb">2019 TWeb 腾讯前端技术大会精彩回顾</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/15/http">http2/http3总结</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/11/19/npm">npm命令使用技巧总结</a></h1><p class="post-meta">November 19, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>本文为翻译文章，原文链接：<a href="https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12">https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12</a>。</p>
+<!--truncate-->
+**如有错误，欢迎指正～**
+<p>如果你日常工作中有使用 NPM ，我相信你会喜欢这些使用技巧的。</p>
+<h4><a class="anchor" aria-hidden="true" id="创建项目"></a><a href="#创建项目" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>创建项目</h4>
+<p>我们经常使用<code>npm init</code>来创建项目，并按照提示输入项目信息(项目名称、作者等)，但是，如果我们并不关心项目信息，并且保留默认值，那么我们对 npm 请求的每条数据按 Enter 键即可。
+事实上，我们只需要使用<code>npm init -y</code>,这个命令就可以达到直接使用默认值信息建一个项目。</p>
+<h4><a class="anchor" aria-hidden="true" id="安装模块"></a><a href="#安装模块" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>安装模块</h4>
+<p>使用<code>npm install</code>来安装，你可以使用其简写<code>npm i</code></p>
+<h4><a class="anchor" aria-hidden="true" id="一次性安装多个模块"></a><a href="#一次性安装多个模块" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>一次性安装多个模块</h4>
+<p>无需为你要安装的每个模块都输入一遍<code>npm i</code>指令，像这样：</p>
+<pre><code class="hljs css language-js">npm i gulp-pug
+npm i gulp-debug
+npm i gulp-sass
+</code></pre>
+<p>你只需要输入一行命令即可一次性批量安装模块</p>
+<pre><code class="hljs css language-js">npm i gulp-pug gulp-debug gulp-sass
+</code></pre>
+<p>更快捷的是，如果安装的所有模块的前缀是相同的，则可以这样安装，无需输入完整模块名</p>
+<pre><code class="hljs css language-js">npm i gulp{-debug,-sass,-pug}
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="使用一些安装标志的快捷方式"></a><a href="#使用一些安装标志的快捷方式" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>使用一些安装标志的快捷方式</h4>
+<p>如果你想安装一些包到生产环境依赖下面，你通常是这样安装：</p>
+<pre><code class="hljs css language-js">npm i gulp --save-prod
+</code></pre>
+<p>更简化，你可以使用<code>-P</code>标志，这样安装：</p>
+<pre><code class="hljs css language-js">npm i gulp -P
+</code></pre>
+<p>同理，开发环境下的依赖安装，你可以用<code>-D</code>代替<code>--save-dev</code></p>
+<pre><code class="hljs css language-js">npm i gulp -D
+</code></pre>
+<p>当你不带任何安装标志时，npm 默认将模块作为依赖项目添加到<code>package.json</code>文件中。如果你想避免这样，你可以使用<code>no-save</code>,这样安装：</p>
+<pre><code class="hljs css language-js">npm i vue --no-save
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="获取安装包信息"></a><a href="#获取安装包信息" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>获取安装包信息</h4>
+<p>使用<code>npm view xxx</code>或<code>npm v xxx</code>可以查看包信息，例如：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/npm/WechatIMG117.png" alt="GitHub">
+如果你只是想看安装包最近的版本信息，你可以这样：</p>
+<pre><code class="hljs css language-js">&gt; npm v vue version
+&gt; <span class="hljs-number">2.5</span><span class="hljs-number">.17</span>
+</code></pre>
+<p>如果你想获取安装包完整的版本信息列表，你可以使用复数形式，例如：</p>
+<pre><code class="hljs">&gt; npm v vue versions
+&gt; [ '<span class="hljs-number">0.0</span><span class="hljs-number">.0</span>',
+  '<span class="hljs-number">0.6</span><span class="hljs-number">.0</span>',
+  '<span class="hljs-number">0.7</span><span class="hljs-number">.0</span>',
+  ...
+  '<span class="hljs-number">2.5</span><span class="hljs-number">.15</span>',
+  '<span class="hljs-number">2.5</span><span class="hljs-number">.16</span>',
+  '<span class="hljs-number">2.5</span><span class="hljs-number">.17</span>-beta<span class="hljs-number">.0</span>',
+  '<span class="hljs-number">2.5</span><span class="hljs-number">.17</span>' ]
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="安装指定版本安装包"></a><a href="#安装指定版本安装包" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>安装指定版本安装包</h4>
+<p>如果你想安装一个不是最新版本的安装包，你可以指定某个版本来安装，如：</p>
+<pre><code class="hljs css language-js">npm i vue@<span class="hljs-number">2.5</span><span class="hljs-number">.15</span>
+</code></pre>
+<p>鉴于记住标签比记住版本数字容易多了，你可以使用用<code>npm v</code>命令来查到的版本信息列表里面的<code>dist-tag</code>来安装,比如：</p>
+<pre><code class="hljs css language-js">npm i vue@beta
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="搜索安装包"></a><a href="#搜索安装包" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>搜索安装包</h4>
+<p>有时候你不能明确记得你曾经使用过的或者朋友推荐的包名，这种情况下，你可以使用<code>npm search</code>从终端直接执行搜索，如：</p>
+<pre><code class="hljs css language-js">npm search gulp debug
+</code></pre>
+<p>或者</p>
+<pre><code class="hljs css language-js">npm s gulp debug
+</code></pre>
+<p>这将打印出包含说明、作者等其他信息的安装包列表。如图：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/npm/WechatIMG119.png" alt="GitHub"></p>
+<h4><a class="anchor" aria-hidden="true" id="卸载包"></a><a href="#卸载包" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>卸载包</h4>
+<p>如果你不想转到<code>package.json</code>文件并手动删除依赖包，则可以用以下方法删除：</p>
+<pre><code class="hljs css language-js">npm uninstall vue
+</code></pre>
+<p>这个命令会删除<code>node_modules</code>文件夹及<code>package.json</code>中对应的包。当然，你也可以用<code>rm</code>,<code>un</code>或者<code>r</code>来达到相同的效果:</p>
+<pre><code class="hljs css language-js">npm rm vue
+</code></pre>
+<p>如果由于某些原因，你只想从<code>node_modules</code>文件夹中删除安装包，但是想在<code>package.json</code>中保留其依赖项，那么你可以使用<code>no-save</code>标志，如：</p>
+<pre><code class="hljs css language-js">npm rm vue --no-save
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="依赖枚举"></a><a href="#依赖枚举" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>依赖枚举</h4>
+<p>如果你想看一下你的项目依赖了哪些安装包，你可以这样看：</p>
+<pre><code class="hljs css language-js">npm ls
+</code></pre>
+<p>这个命令会将你项目的依赖列举出来，并且各个安装包的依赖也会显示出来。如果你只想看本项目的依赖，你可以这样：</p>
+<pre><code class="hljs css language-js">npm ls --depth=<span class="hljs-number">0</span>
+</code></pre>
+<p>这样打印出来的结果就是本项目的依赖，像这样：</p>
+<pre><code class="hljs css language-js">├── jquery@<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>
+├── vue@<span class="hljs-number">2.5</span><span class="hljs-number">.17</span>
+└── yarn@<span class="hljs-number">1.12</span><span class="hljs-number">.3</span>
+</code></pre>
+<p>当然，你也可以加上<code>g</code>来看看你全局安装的依赖包，如：</p>
+<pre><code class="hljs css language-js">npm ls -g -depth <span class="hljs-number">0</span>
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="过期依赖枚举"></a><a href="#过期依赖枚举" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>过期依赖枚举</h4>
+<p>大多数时候，你需要保持本地依赖的更新，你可以在项目目录下先查看一下安装包有没有版本更新，如：</p>
+<pre><code class="hljs css language-js">npm outdate
+</code></pre>
+<p>这个命令将会列出所有你可能有更新的过时的安装包列表，如图：
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/images/npm/1_uuG2qo4JwOM1cL4Q0HTN4g.png" alt="GitHub"></p>
+<h4><a class="anchor" aria-hidden="true" id="执行测试"></a><a href="#执行测试" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>执行测试</h4>
+<p>你可以使用<code>npm run tests</code>来执行测试用例，但是你可以更方便地用<code>npm test</code>或者<code>npm t</code>来执行。</p>
+<h4><a class="anchor" aria-hidden="true" id="显示可用脚本"></a><a href="#显示可用脚本" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>显示可用脚本</h4>
+<p>我们可以通过打开<code>package.json</code>文件来查看有哪些可执行的脚本，但是我们还可以这样查看：</p>
+<pre><code class="hljs css language-js">npm run
+</code></pre>
+<p>如果在<code>package.json</code>中有如下配置：</p>
+<pre><code class="hljs css language-js"><span class="hljs-string">"scripts"</span>: {
+  <span class="hljs-string">"test"</span>: <span class="hljs-string">"jest"</span>,
+  <span class="hljs-string">"build"</span>: <span class="hljs-string">"gulp build"</span>
+}
+</code></pre>
+<p>那么执行这个命令之后，会显示以下信息：</p>
+<pre><code class="hljs css language-js">Lifecycle scripts included <span class="hljs-keyword">in</span> npm:
+  test
+    jest
+available via <span class="hljs-string">`npm run-script`</span>:
+  build
+    gulp-build
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="安装github-repo上的包"></a><a href="#安装github-repo上的包" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>安装Github Repo上的包</h4>
+<p>你可以直接这样安装来自<code>Github repo</code>上的包：</p>
+<pre><code class="hljs css language-js">npm i https:<span class="hljs-comment">//github.com/sindresorhus/gulp-debug</span>
+</code></pre>
+<p>或者你可以忽略域名安装：</p>
+<pre><code class="hljs css language-js">npm i sindresorhus/gulp-debug
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="打开安装包的github主页"></a><a href="#打开安装包的github主页" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>打开安装包的Github主页</h4>
+<p>你当然可以直接谷歌搜索，然后找到对应的包链接打开，但是你还可以这样：</p>
+<pre><code class="hljs css language-js">npm repo create-react-app
+</code></pre>
+<p>有不需要安装的包，又想看下其 github 主页的，可以这样打开。</p>
+<h4><a class="anchor" aria-hidden="true" id="列出所有npm环境的可用变量"></a><a href="#列出所有npm环境的可用变量" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>列出所有NPM环境的可用变量</h4>
+<p>你可以使用这个命令来列出所有NPM环境的可用变量：</p>
+<pre><code class="hljs css language-js">npm run env | grep npm_
+</code></pre>
+<p>执行后，将会打印出这样的信息：</p>
+<pre><code class="hljs css language-js">npm_config_fetch_retry_maxtimeout=<span class="hljs-number">60000</span>
+npm_config_tag_version_prefix=v
+npm_config_strict_ssl=<span class="hljs-literal">true</span>
+npm_config_sso_type=oauth
+.
+.
+.
+</code></pre>
+<p>这样变量的用处就是，可以在脚本中使用它们，还可以创建自己的变量。</p>
+<h4><a class="anchor" aria-hidden="true" id="创建自己的npm可用变量"></a><a href="#创建自己的npm可用变量" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>创建自己的NPM可用变量</h4>
+<p>你可以在<code>package.json</code>中添加新的 <code>key</code> 来创建自己的npm变量，可以是任何 key ，我更喜欢将所有的npm变量都放在一个config中，这样看起来比较清晰：</p>
+<pre><code class="hljs css language-js"><span class="hljs-string">"config"</span>: {
+  <span class="hljs-string">"build_folder"</span>:<span class="hljs-string">"./dist"</span>
+}
+</code></pre>
+<p>你添加了之后，重新执行<code>npm run env | grep npm_</code>，就能看到以下信息：</p>
+<pre><code class="hljs css language-js">npm_package_config_build_folder=./dist
+npm_config_fetch_retry_maxtimeout=<span class="hljs-number">60000</span>
+npm_config_tag_version_prefix=v
+npm_config_strict_ssl=<span class="hljs-literal">true</span>
+npm_config_sso_type=oauth
+.
+.
+.
+</code></pre>
+<p>默认情况下，npm会重命名你的变量，给其加上前缀<code>npm_package</code>，并将其结构保留在<code>package.json</code>文件中，即变为<code>config_build_folder</code>。</p>
+<h4><a class="anchor" aria-hidden="true" id="在npm脚本中使用npm变量"></a><a href="#在npm脚本中使用npm变量" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>在npm脚本中使用npm变量</h4>
+<p>你可以看到可用变量的完整列表，如果你想使用这些变量中的任何值，就可以在<code>package.json</code>中使用了，如：</p>
+<pre><code class="hljs css language-js"><span class="hljs-string">"scripts"</span>: {
+  <span class="hljs-string">"build"</span>: <span class="hljs-string">"gulp build --dist $npm_package_config_build_folder"</span>
+}
+</code></pre>
+<p>当你执行<code>npm run build</code>的时候，实际执行的是这样：</p>
+<pre><code class="hljs css language-js">gulp build --dist ./dist
+</code></pre>
+<p>以上就是一些我最爱的日常工作中用到的命令，如有更多，欢迎来告诉我～</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

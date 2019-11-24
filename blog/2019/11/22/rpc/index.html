@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Nodejs之RPC调研 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="随着 Nodejs 的兴起，越来越多的 Web 服务中间层被搭建起来。如Node服务端渲染，BFF(Backend For Frontend))层，而RPC是远端过程调用，经常用于BFF层。最近，我打算写一个中间层，用Nodejs调用Go服务，除了可以简单用http调用之外，发现还有基于RPC的调用就研究了一下。"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Nodejs之RPC调研 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/11/22/rpc"/><meta property="og:description" content="随着 Nodejs 的兴起，越来越多的 Web 服务中间层被搭建起来。如Node服务端渲染，BFF(Backend For Frontend))层，而RPC是远端过程调用，经常用于BFF层。最近，我打算写一个中间层，用Nodejs调用Go服务，除了可以简单用http调用之外，发现还有基于RPC的调用就研究了一下。"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6">深入了解强大的 ES6 「 ... 」 运算符</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/11/22/rpc">Nodejs之RPC调研</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/19/npm">npm命令使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/17/tweb">2019 TWeb 腾讯前端技术大会精彩回顾</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/15/http">http2/http3总结</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/11/22/rpc">Nodejs之RPC调研</a></h1><p class="post-meta">November 22, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>随着 Nodejs 的兴起，越来越多的 Web 服务中间层被搭建起来。如Node服务端渲染，BFF(Backend For Frontend))层，而RPC是远端过程调用，经常用于BFF层。最近，我打算写一个中间层，用Nodejs调用Go服务，除了可以简单用http调用之外，发现还有基于RPC的调用就研究了一下。</p>
+<!--truncate-->
+### RPC简介
+RPC（Remote Procedure Call）中文名「远程过程调用」,拆开理解,「过程」也叫方法或函数，「远程」就是说方法不在当前进程里，而是在其他进程或机器上面，合起来 RPC 就是调用其他进程或机器上面的函数。简单讲，就是本地调用的逻辑处理的过程放在的远程的机器上，而不是本地服务代理来处理。一个完整的 RPC 框架主要有三部分组成：通信框架、通信协议、序列化和反序列化格式。
+<h3><a class="anchor" aria-hidden="true" id="前端视角看rpc"></a><a href="#前端视角看rpc" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>前端视角看RPC</h3>
+<h4><a class="anchor" aria-hidden="true" id="与ajax对比相同点"></a><a href="#与ajax对比相同点" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>与Ajax对比相同点</h4>
+<ul>
+<li>都是两个计算机之间的网络通信，Ajax 是浏览器和服务器通信，RPC 是服务器和服务器通信</li>
+<li>都需要双方约定一个数据格式</li>
+</ul>
+<h4><a class="anchor" aria-hidden="true" id="与ajax对比不同点"></a><a href="#与ajax对比不同点" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>与Ajax对比不同点</h4>
+<ul>
+<li>RPC 调用不一定使用DNS作为寻址服务，Ajax一般是浏览器向服务器请求，请求地址一般是<code>https://域名/xxx</code>,服务器需要根据域名区寻找对应的IP地址，这就是DNS寻址过程，而RPC一般用在内网之间互相请求，一般使用特有服务进行寻址。</li>
+<li>RPC 应用层协议一般不使用 HTTP，一般使用一些二进制协议，其优点是数据包体积更小、编解码速率更快。</li>
+<li>RPC 基于 TCP 或 UDP 协议，其中TCP通信又存在多种通信方式,单工通信[两个服务器之间，只允许单向发送消息，如只能A给B发消息]、半双工通信[两个服务器之间，同一时间只允许单向发送消息,如时间段一A发给B，时间段二B发给A，又称为轮番单工通信]、全双工通信[可以自由互相发送消息]。</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="rpc与http区别"></a><a href="#rpc与http区别" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RPC与HTTP区别</h3>
+<ul>
+<li>RPC 通常所讲是一个框架，而 HTTP(HyperText Transfer Protocol) 是基于 TCP 的实现的超文本传输协议，HTTP 是无状态协议；最初用于浏览器与服务器的通信，后来广泛用于各个服务间的通信。</li>
+<li>RPC是远程过程调用，RPC框架可以的通信过程可以使用各种通信协议（如 HTTP，TCP以及各种自定义协议）实现。良好的rpc调用是面向服务的封装，针对服务的可用性和效率等都做了优化。单纯使用http调用则缺少了这些特性。</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="基本原理"></a><a href="#基本原理" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基本原理</h3>
+<p>首先来看看一个 基于 TCP 的 RPC 调用的基本流程，以便对它有个宏观的认识。</p>
+<ol>
+<li>调用方（Client）通过本地的 RPC 代理（Proxy）调用相应的接口</li>
+<li>本地代理将 RPC 的服务名，方法名和参数等等信息转换成一个标准的 RPC Request 对象，即组装成能够进行网络传输的消息体</li>
+<li>RPC 框架采用 RPC 协议（RPC Protocol）将 RPC Request 对象序列化成二进制形式，然后通过 TCP 通道传递给服务提供方 （Server）</li>
+<li>服务端（Server）收到二进制数据后，将它反序列化成 RPC Request 对象(解码)</li>
+<li>服务端（Server）根据 RPC Request 中的解码信息找到本地对应的方法，传入参数执行，得到结果，并将结果封装成 RPC Response 交给 RPC 框架</li>
+<li>RPC 框架将 RPC Response 对象序列化成二进制形式，然后通过 TCP 通道传递给服务调用方（Client）</li>
+<li>调用方（Client）收到二进制数据后，将它反序列化成 RPC Response 对象，并且将结果通过本地代理（Proxy）返回给业务代码</li>
+<li>调用方（Client）得到最终结果。</li>
+</ol>
+<p>RPC的目标就是要将2~8这些步骤都封装起来，让用户对这些细节透明。</p>
+<h3><a class="anchor" aria-hidden="true" id="简单rpc通信协议设计"></a><a href="#简单rpc通信协议设计" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>简单RPC通信协议设计</h3>
+<p>通常它由一个 Header 和一个 Payload（类似于 HTTP 的 Body）组成，合起来叫一个包（Packet）。之所以要有包，是因为二进制只完成 Stream 的传输，并不知道一次数据请求和响应的起始和结束，我们需要预先定义好包结构才能做解析。</p>
+<p>协议设计就像把一个数据包按顺序切分成若干个单位长度的「小格子」，然后约定每个「小格子」里存储什么样的信息，一个「小格子」就是一个 Byte，它是协议设计的最小单位，1 Byte 是 8 Bit，可以描述 0 ~ 2^8 个字节数，具体使用多少个字节要看实际存储的信息。</p>
+<p>简单包结构设计：</p>
+<ul>
+<li>标记包的类型，比如：0 表示请求，1 表示响应，需要一个Byte</li>
+<li>关联ID，将请求和它对应的响应关联起来，这个 ID 我们选择用一个 Int32 类型（4 Bytes）自增的数字表示</li>
+<li>Payload 长度记录，要能实现包的准确切割，我们需要明确包的长度，用4个Byte</li>
+<li>应用层协议类型标记，一个Byte</li>
+</ul>
+<pre><code class="hljs css language-js"><span class="hljs-number">0</span>      <span class="hljs-number">1</span>      <span class="hljs-number">2</span>      <span class="hljs-number">3</span>      <span class="hljs-number">4</span>      <span class="hljs-number">5</span>      <span class="hljs-number">6</span>      <span class="hljs-number">7</span>      <span class="hljs-number">8</span>      <span class="hljs-number">9</span>     <span class="hljs-number">10</span>
++------+------+------+------+------+------+------+------+------+------+
+| type |          requestId        | codec|         bodyLength        |
++------+---------------------------+------+---------------------------+
+|                  ...          payload                               |
+|                                                     ...             |
++---------------------------------------------------------------------+
+</code></pre>
+<p>这已经是可以工作的 RPC 通讯协议了，但随着 RPC 功能的增加我们可能需要记录更多的信息，这里就不说了。可以自行再了解。</p>
+<h3><a class="anchor" aria-hidden="true" id="nodejs-实现-rpc-通讯协议"></a><a href="#nodejs-实现-rpc-通讯协议" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Nodejs 实现 RPC 通讯协议</h3>
+<p>Nodejs 中有个 Buffer 模块，可以提供对二进制数据的操作。所以我们可以用来进行二进制的编码和解码，结合上面的通信协议，可以写出编码和解码部分代码。</p>
+<h4><a class="anchor" aria-hidden="true" id="简单编码部分"></a><a href="#简单编码部分" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>简单编码部分</h4>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// 编码</span>
+<span class="hljs-keyword">const</span> payload = {
+  <span class="hljs-attr">service</span>: <span class="hljs-string">'com.test'</span>,
+  <span class="hljs-attr">methodName</span>: <span class="hljs-string">'plus'</span>,
+  <span class="hljs-attr">args</span>: [ <span class="hljs-number">1</span>, <span class="hljs-number">2</span> ],
+};
+<span class="hljs-keyword">const</span> body = <span class="hljs-keyword">new</span> Buffer(<span class="hljs-built_in">JSON</span>.stringify(payload));
+
+<span class="hljs-keyword">const</span> header = <span class="hljs-keyword">new</span> Buffer(<span class="hljs-number">10</span>);
+header[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+header.writeInt32BE(<span class="hljs-number">1000</span>, <span class="hljs-number">1</span>);
+header[<span class="hljs-number">5</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// codec =&gt; 1 代表是 JSON 序列化</span>
+header.writeInt32BE(body.length, <span class="hljs-number">6</span>);
+
+<span class="hljs-keyword">const</span> packet = Buffer.concat([ header, body ], <span class="hljs-number">10</span> + body.length);
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="简单解码部分"></a><a href="#简单解码部分" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>简单解码部分</h4>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// 解码</span>
+<span class="hljs-keyword">const</span> type = buf[<span class="hljs-number">0</span>]; <span class="hljs-comment">// =&gt; 0 (request)</span>
+<span class="hljs-keyword">const</span> requestId = buf.readInt32BE(<span class="hljs-number">1</span>); <span class="hljs-comment">// =&gt; 1000</span>
+<span class="hljs-keyword">const</span> codec = buf[<span class="hljs-number">5</span>];
+<span class="hljs-keyword">const</span> bodyLength = buf.readInt32BE(<span class="hljs-number">6</span>);
+
+<span class="hljs-keyword">const</span> body = buf.slice(<span class="hljs-number">10</span>, <span class="hljs-number">10</span> + bodyLength);
+<span class="hljs-keyword">const</span> payload = <span class="hljs-built_in">JSON</span>.parse(body);
+</code></pre>
+<p>极客时间上，也有介绍基于 TCP 的，半双工通信及全双工通信的代码，有兴趣可以看看这个：
+<a href="https://github.com/geektime-geekbang/geek-nodejs/tree/master/chapter2/rpc">https://github.com/geektime-geekbang/geek-nodejs/tree/master/chapter2/rpc</a></p>
+<h3><a class="anchor" aria-hidden="true" id="参考资料"></a><a href="#参考资料" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>参考资料</h3>
+<ul>
+<li><a href="https://www.yuque.com/egg/nodejs/dklip5#8zptst">https://www.yuque.com/egg/nodejs/dklip5#8zptst</a></li>
+<li>极客时间《Node.js开发实战》</li>
+<li><a href="https://cnodejs.org/topic/5cf349f91fe902120f31b47a">https://cnodejs.org/topic/5cf349f91fe902120f31b47a</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

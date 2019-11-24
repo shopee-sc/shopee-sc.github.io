@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>2019 TWeb 腾讯前端技术大会精彩回顾 · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="​"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="2019 TWeb 腾讯前端技术大会精彩回顾 · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/11/17/tweb"/><meta property="og:description" content="​"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2019/20/21/es6">深入了解强大的 ES6 「 ... 」 运算符</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/22/rpc">Nodejs之RPC调研</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/19/npm">npm命令使用技巧总结</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/11/17/tweb">2019 TWeb 腾讯前端技术大会精彩回顾</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/15/http">http2/http3总结</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/11/17/tweb">2019 TWeb 腾讯前端技术大会精彩回顾</a></h1><p class="post-meta">November 17, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/LuckyWinty" target="_blank" rel="noreferrer noopener">Winty zhou</a></p></div></header><div><span><p>​
+周六的时候去了 TWeb 腾讯前端技术大会, 总结一下. 接下来的文章会结合自己的理解介绍大会中的重点内容和相关技术落地的成果或进度. 为了更清晰地阐述一些技术点，会加上自己的理解.</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="分享主题-是时候了解一下-web-idl"></a><a href="#分享主题-是时候了解一下-web-idl" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 是时候了解一下 Web IDL</h2>
+<p>讲师: 吴小倩 - W3C 中国总经理</p>
+<h3><a class="anchor" aria-hidden="true" id="什么是-web-idl"></a><a href="#什么是-web-idl" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>什么是 Web IDL</h3>
+<blockquote>
+<p>Web IDL 的关键在于定义了如何把 DOM 和相关的 Web API 映射到语言里，尤其是 ECMAScript。之前的标准都使用 OMG IDL，没有正式的对这些映射关系做出定义，实现者需要从字里行间猜测。 -- Maciej Stachowiak (Webkit), 2009-9-28</p>
+</blockquote>
+<blockquote>
+<p>2015年8月4日，W3C的Web应用工作组（Web Applications Working Group）发布了Web接口定义语言（Web IDL Level 1）的标准工作草案。该文档定义了接口定义语言（interface definition language）即Web IDL，它可用于描述要在Web浏览器中实现的接口。Web IDL是一种IDL的变体，它所具有的大量特性使之能够更容易地对Web平台里的常用脚本对象的行为进行指定和说明。</p>
+</blockquote>
+<p>除了描述 ECMAScript 接口之外, Web IDL 可以转换成浏览器代码和 Web API 测试用例. 如果发现了浏览器对标准实现有问题, 可以尝试对照 Web IDL 进行捉虫.</p>
+<p>如果你想读懂 DOM 和 Web API 的定义, 更好地书写你对 Web 的想提案, 更好地认识浏览器和 Web, 你需要了解 Web IDL.</p>
+<p>关于 Web IDL 的相关语法和相关工具, 因为介绍篇幅较长, 可以自行看 ppt 了解</p>
+<p>参考:</p>
+<p><a href="http://www.chinaw3c.org/archives/1052/">W3C发布了Web接口定义语言（Web IDL Level 1）的标准工作草案</a></p>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-headless-cms小微项目的业务中台解决方案"></a><a href="#分享主题-headless-cms小微项目的业务中台解决方案" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: Headless CMS——小微项目的业务中台解决方案</h2>
+<p>讲师: 张云龙 - 巧子科技创始人</p>
+<h3><a class="anchor" aria-hidden="true" id="目前讲师在做的事情"></a><a href="#目前讲师在做的事情" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>目前讲师在做的事情</h3>
+<p>将以下图中讲到的所有流程, 都封装起来, 做了一套系统</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/headless-cms.png" alt="headless cms"></p>
+<p>分享中, 讲师着重介绍了 <code>strapi</code>, 这是一个开源的 Node.js Headless CMS 框架. 该框架通过简单的几行 npm 命令, 即可生成一个 CMS 系统, 该系统通过界面操作, 可以生成数据库表, node 增删改查的代码代码和相关路由. 以下是 <code>strapi</code> 的视频介绍</p>
+<!-- <video src="strapi.mp4"> 这里应该有个视频 -->
+<h2><a class="anchor" aria-hidden="true" id="分享主题-flutter在腾讯企鹅辅导上的实践之路"></a><a href="#分享主题-flutter在腾讯企鹅辅导上的实践之路" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: Flutter在腾讯企鹅辅导上的实践之路</h2>
+<p>讲师: 涂金林 - 腾讯教育 Flutter 负责人</p>
+<p>讲师先是介绍了 flutter, 接着讲了腾讯企鹅辅导上的实践, 包括了安卓, iOS 和 Pad 上的原生应用如何嵌入 flutter 以及原生页面与 flutter 页面混合切换的实践, 另外还讲了 flutter 的性能优化与 flutter for web 在生产环境的实践. 这里边的技术细节限于篇幅就不再赘述.</p>
+<p>为了更好的了解 flutter 在腾讯的落地情况, 大家可以看这个视频</p>
+<!-- 这里要有个视频 <video src="https://v.qq.com/x/page/t09240vp8cy.html"> -->
+<h2><a class="anchor" aria-hidden="true" id="分享主题-大型web项目可用性提升优化方案"></a><a href="#分享主题-大型web项目可用性提升优化方案" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 大型Web项目可用性提升优化方案</h2>
+<p>讲师: 郭林烁 - 腾讯 AlloyTeam 高级前端工程师</p>
+<p>讲师所在的项目是腾讯文档, 是一个大型的团队, 一个页面就有很多人开发, 在遇到问题时, 得先指定人排查, 排查出问题, 再交接给相应的人解决, 比较低效, 这次分享讲了如何解决这个问题主要分以下三个方面</p>
+<h3><a class="anchor" aria-hidden="true" id="脚本错误监控、优化、持续跟进"></a><a href="#脚本错误监控、优化、持续跟进" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>脚本错误监控、优化、持续跟进</h3>
+<p>讲师所在的团队, 通过脚本错误监控, 结合代码 sourceMap, 定位到出错文件的具体位置, 通过自动化脚本与 git blame 命令, 找出当前报错行的历史提交者, 通过内部工单系统, 自动提 bug 单给历史提交者, 因为工单有内部流程保证会被处理.</p>
+<p>在开发阶段, 如果有脚本报错, 也会自动弹窗, 阻断开发.</p>
+<p>对报错量级进行了监控, 如果突然上涨, 也会有相应告警.</p>
+<p>经过以上几个措施, 线上的报错量越来越少了.</p>
+<h3><a class="anchor" aria-hidden="true" id="前端日志系统搭建、优化与打通"></a><a href="#前端日志系统搭建、优化与打通" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>前端日志系统搭建、优化与打通</h3>
+<p>经过上面的错误监控, 优化与持续跟进, 已经解决了脚本错误的问题, 但如果有些逻辑问题, 在大型项目里也是很难定位. 这个时候就要依靠日志了.</p>
+<p>因为是个大型的项目, 前端也会产生很多日志, 通过前端上报不靠谱, 容易在上传时丢失. 我们来看看腾讯文档做了哪些内容解决日志问题</p>
+<ol>
+<li>利用了客户端(微信, QQ)的接口, 通过客户端上报到内部的日志系统</li>
+<li>为了不阻塞用户的交互, 利用 worker 线程进行上报.</li>
+<li>将所有的异步请求做了拦截监控, 相当于是前端的一个远程抓包, 通过一个 id 即可查找到</li>
+<li>接入了 &quot;吐个槽&quot; 服务, 可以方便地收到真实用户的反馈</li>
+<li>将所有遇到的问题落地为测试用例, 防止之后再犯</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="腾讯文档白屏监控体系与优化"></a><a href="#腾讯文档白屏监控体系与优化" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>腾讯文档“白屏”监控体系与优化</h3>
+<ol>
+<li>增加 loading, 减缓用户的焦虑</li>
+<li>对加载失败的静态文件进行加载重试, 并结合 wait-external-webpack-plugin 插件确保重试后, 代码的依赖顺序依然正确</li>
+<li>在重试加载后, 如果还没加载成功, 就弹框提示用户网络可能存在问题, 让用户刷新或反馈</li>
+<li>为了检测加载到的资源与发布的资源是一直的, 还在 script 标签的 integrity 属相加了 js 文件的 sha1 值做一致性检测</li>
+<li>为了防止运营商劫持, 采用了内容安全策略(CSP)进行预防</li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-《腾讯-omi-》---omi-框架前端生态赋能与创新实践"></a><a href="#分享主题-《腾讯-omi-》---omi-框架前端生态赋能与创新实践" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 《腾讯 OMI +》 - OMI 框架前端生态赋能与创新实践</h2>
+<p>讲师: 张磊 - 知名开源框架 OMI 作者</p>
+<p>该分享的 PPT 就有 80 多页, 现场分享更是一度超时, 这里就长话短说, 讲一些核心的内容</p>
+<h3><a class="anchor" aria-hidden="true" id="cross-frameworks-framework"></a><a href="#cross-frameworks-framework" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cross-Frameworks Framework</h3>
+<p>OMI 是一个跨框架的框架, 也就是 OMI 可以结合 react, vue, Web Component, Kbone, Preact, Three.js 等框架使用. 用 OMI 编写的组件, 也可以被 react, vue, preact 等框架直接使用, 反过来, react, vue, preact 等框架也可以使用 OMI 编写的组件.</p>
+<h3><a class="anchor" aria-hidden="true" id="omi-three"></a><a href="#omi-three" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>OMI-THREE</h3>
+<p>另外比较有趣的是 OMI-THREE, 如果纯基于 three.js 编写游戏或 3D 场景, 我们需要创建很多实例, 比如 new 一个场景, new 一个立方体, 这里放一个光效, 这里加一个旋转, 这些都需要我们编写一些命令式的代码来处理. 但 OMI-THREE 可以让我们以生命式的写法完成以上内容, 来看个 demo:</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/omi-rotate.gif" alt="omi three 动效"></p>
+<p>实现以上效果的代码是声明式的, 很清晰:</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/omi-code.png" alt="omi three 动效"></p>
+<p>关于 OMI 还有其他内容, 如 OMI + React, OMI + Vue, OMI + Kbone, OMIX, OMIM 以及 OMI 设计哲学, 感兴趣的可以查看 PPT</p>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-极致ssr：高效率构建高性能web同构页面"></a><a href="#分享主题-极致ssr：高效率构建高性能web同构页面" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 极致SSR：高效率构建高性能Web同构页面</h2>
+<p>讲师: 段隆贤 - Vue 语法编译引擎 aga 作者</p>
+<h3><a class="anchor" aria-hidden="true" id="为什么需要-ssr"></a><a href="#为什么需要-ssr" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>为什么需要 SSR</h3>
+<ol>
+<li>更好的搜索引擎优化(SEO: Search Engine Optimization)</li>
+<li>更快的首次有效绘制(FMP: First Meaningful Paint)</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="ssr-的现状"></a><a href="#ssr-的现状" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>SSR 的现状</h3>
+<ol>
+<li>一般SSR, 首屏(FMP)依赖页面所有接口， 首屏不一定快，同时分块传输有额外的工作量</li>
+<li>开发效率低: 传统的SSR, 需要操作DOM, 开发效率低， 难维护， 同构页面可响应时间（TTI）长</li>
+<li>SSR页面切换无法渐进式加载， 页面切换时不能定义过渡动画</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="什么是分块传输"></a><a href="#什么是分块传输" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>什么是分块传输</h3>
+<p>不需要等待页面所有的接口返回， 页面头部接口响应即可响应页面， FP(首字渲染 first paint)和FCP(首次内容渲染: first contentful paint)更快</p>
+<p>例如一个 v.qq.com 的请求, 利用分块传输, 可以先返回首屏内容, 后面的内容等数据拉取好后再返回, 注意这里是一个请求</p>
+<h3><a class="anchor" aria-hidden="true" id="讲师团队的实践"></a><a href="#讲师团队的实践" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>讲师团队的实践</h3>
+<p>在 Vue 编译时, 将 Vue 语法编译为字符串拼接, 并通过自动化分块传输, 并做到了同构开发.</p>
+<h3><a class="anchor" aria-hidden="true" id="分块传输自动化"></a><a href="#分块传输自动化" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分块传输自动化</h3>
+<ol>
+<li>程序分析模板的异步数据， 自动拆分模板</li>
+<li>根据模板上下的依赖关系 , 自动收集数据依赖</li>
+<li>自动把局部模板和数据关联</li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-serverless-ssr-实践"></a><a href="#分享主题-serverless-ssr-实践" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: Serverless SSR 实践</h2>
+<p>讲师: 水澜 - 阿里巴巴前端技术专家</p>
+<p>要做 SSR 并不容易, 首先我们要保障 Node 服务的稳定性, 期间我们可能会遇到如下问题:</p>
+<ol>
+<li>磁盘占用过多</li>
+<li>内存负载变高</li>
+<li>内存溢出</li>
+<li>Node 服务发生错误</li>
+<li>Node 宕机</li>
+<li>扩缩容, 机器裁撤</li>
+</ol>
+<p>另外还要考虑如何让一套代码两端共用:</p>
+<ol start="7">
+<li>渲染机制的差异</li>
+<li>端上环境的限制</li>
+<li>如何处理数据请求</li>
+<li>如何避免状态污染</li>
+<li>开发调试环境的打通</li>
+</ol>
+<p>第一部分, 讲师的实践是将 node 服务落地到 serverless 中, 有如下好处</p>
+<ol>
+<li>函数即服务 (Faas, Function as a service), 开发者可以更关注业务逻辑本身</li>
+<li>天然的隔离性, 动态修复，函数间相互独立</li>
+<li>无需运维, 全托管服务、按需执行、弹性伸缩</li>
+</ol>
+<p>第二部分, 讲师使用阿里开源的 rax 来解决一套代码两端共用的问题</p>
+<p>Rax 是一套遵循 React 标准的跨端解决方案, 并且通过 rax 的脚手架, 执行一条命令便可以部署到阿里的 fc 或国外的 now serverless 提供商中</p>
+<p>这里比较值得关注的是, 在 rax 中, 请求的发起与路由的映射, 是可以做到前后端同构的, 限于篇幅, 感兴趣的同学可以查看 ppt 或 google: rax</p>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-腾讯教育-serverless-实践及探索"></a><a href="#分享主题-腾讯教育-serverless-实践及探索" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 腾讯教育 Serverless 实践及探索</h2>
+<p>讲师: 蒋林源 - 腾讯IMWeb前端工程师</p>
+<h3><a class="anchor" aria-hidden="true" id="serverless-逻辑架构"></a><a href="#serverless-逻辑架构" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serverless 逻辑架构</h3>
+<p>Serverless = Faas + Baas</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/serverless.png" alt="serverless"></p>
+<h3><a class="anchor" aria-hidden="true" id="初探-serverless"></a><a href="#初探-serverless" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>初探 serverless</h3>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/serverless-0.png" alt="serverless 初探"></p>
+<p>如上图所示, 用户在腾讯云的 serverless 平台上, 上传云函数的代码(或直接用在线编辑器编写)
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/serverless-code.png" alt="serverless 上传代码"></p>
+<p>保存后, 我们可以设置触发器,</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/serverless-trigger.png" alt="serverless 触发器"></p>
+<p>也就是上面的 Event Source, 可以是 api gateway, 也就是通过请求来触发, 其它触发器还有: 定时触发, COS 触发(cos 收到上传时触发, 比如上传了一张图片, 触发某个云函数进行压缩), 消息队列触发等等.</p>
+<p>而后边在提供支持的 BaaS, 则提供了很多后端服务, 像 AI, 我们就可以调用语音图像的识别接口, 还可以轻易地调用云 DB, 而云 DB 也不需要我们人工维护, 还有对象存储, 诸如图片, 视频上传, 回源到 CDN等, 简直太方便了.</p>
+<h3><a class="anchor" aria-hidden="true" id="冷启动"></a><a href="#冷启动" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>冷启动</h3>
+<p>目前我体验到腾讯云的冷启动做得比较不错, 只要在一定时间阈值内有访问, 就不存在冷启动的问题, 但如果云函数长期都没人访问, 此后的第一次访问, 就会慢一些. 还可以接受.</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/serverless-start.png" alt="冷启动"></p>
+<h3><a class="anchor" aria-hidden="true" id="腾讯教育相关业务的落地"></a><a href="#腾讯教育相关业务的落地" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>腾讯教育相关业务的落地</h3>
+<p>讲师提到了两个完全使用腾讯云 serverless 的业务, 如下</p>
+<p>企鹅背单词
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/tencent-beidanci.png" alt="企鹅背单词"></p>
+<p>腾讯课堂 - 新人专属礼包
+<img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/WechatIMG18470.png" alt="腾讯课堂 - 新人专属礼包"></p>
+<h3><a class="anchor" aria-hidden="true" id="腾讯云-serverless-devops"></a><a href="#腾讯云-serverless-devops" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>腾讯云 serverless devOps</h3>
+<p>腾讯教育在内部的实践中, devOps 也很完善了, 整个流程如下:</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/tencent-scf-devops.png" alt="腾讯云 serverless devOps"></p>
+<p>开发完 push 代码到 git, 自动触发代码的构建 (yarn &amp;&amp; yarn build 等), 自动触发云函数的部署, 此外, 预发布和发布环境也能通过内部的交付系统流畅地部署</p>
+<h2><a class="anchor" aria-hidden="true" id="分享主题-阿里控制台系统提效之路"></a><a href="#分享主题-阿里控制台系统提效之路" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分享主题: 阿里控制台系统提效之路</h2>
+<p>讲师: 潕量 - 阿里前端技术专家</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/ali-console.png" alt="控制台系统"></p>
+<p>以上即为控制台系统</p>
+<p>一句话概括该分享: 通过内部物料系统(可以理解为 npm 的公共 UI 组件库积累), 阿里自研了一套 Fusion 系统, 可以方便设计师配置设计稿, 该系统的配置粒度几乎满足设计师的所有需求, 配置的每一个参数都会记录下来, 设计师在提交设计稿时, 会根据配置内容, 生成一个 npm 包, 前端开发更新 npm 包, 即可拿到设计师的成果, 该成果是基于物料系统的, 也就是代码生成后, 基于 react 可读(阿里统一使用 react), 此后便可在这个基础上增加前端逻辑, 与设计师沟通扯皮的问题被解决得很彻底.</p>
+<h3><a class="anchor" aria-hidden="true" id="工作流"></a><a href="#工作流" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>工作流</h3>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/ali-console-flow.png" alt="Fusion 工作流"></p>
+<p>来个主题配置的例子(其它例子的图片 ppt 上丢失了动态效果):</p>
+<p><img src="https://raw.githubusercontent.com/LuckyWinty/blog/master/markdown/tweb/ali-console-demo-0.gif" alt="Fusion demo"></p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#分享主题-是时候了解一下-web-idl">分享主题: 是时候了解一下 Web IDL</a><ul class="toc-headings"><li><a href="#什么是-web-idl">什么是 Web IDL</a></li></ul></li><li><a href="#分享主题-headless-cms小微项目的业务中台解决方案">分享主题: Headless CMS——小微项目的业务中台解决方案</a><ul class="toc-headings"><li><a href="#目前讲师在做的事情">目前讲师在做的事情</a></li></ul></li><li><a href="#分享主题-flutter在腾讯企鹅辅导上的实践之路">分享主题: Flutter在腾讯企鹅辅导上的实践之路</a></li><li><a href="#分享主题-大型web项目可用性提升优化方案">分享主题: 大型Web项目可用性提升优化方案</a><ul class="toc-headings"><li><a href="#脚本错误监控、优化、持续跟进">脚本错误监控、优化、持续跟进</a></li><li><a href="#前端日志系统搭建、优化与打通">前端日志系统搭建、优化与打通</a></li><li><a href="#腾讯文档白屏监控体系与优化">腾讯文档“白屏”监控体系与优化</a></li></ul></li><li><a href="#分享主题-《腾讯-omi-》---omi-框架前端生态赋能与创新实践">分享主题: 《腾讯 OMI +》 - OMI 框架前端生态赋能与创新实践</a><ul class="toc-headings"><li><a href="#cross-frameworks-framework">Cross-Frameworks Framework</a></li><li><a href="#omi-three">OMI-THREE</a></li></ul></li><li><a href="#分享主题-极致ssr：高效率构建高性能web同构页面">分享主题: 极致SSR：高效率构建高性能Web同构页面</a><ul class="toc-headings"><li><a href="#为什么需要-ssr">为什么需要 SSR</a></li><li><a href="#ssr-的现状">SSR 的现状</a></li><li><a href="#什么是分块传输">什么是分块传输</a></li><li><a href="#讲师团队的实践">讲师团队的实践</a></li><li><a href="#分块传输自动化">分块传输自动化</a></li></ul></li><li><a href="#分享主题-serverless-ssr-实践">分享主题: Serverless SSR 实践</a></li><li><a href="#分享主题-腾讯教育-serverless-实践及探索">分享主题: 腾讯教育 Serverless 实践及探索</a><ul class="toc-headings"><li><a href="#serverless-逻辑架构">Serverless 逻辑架构</a></li><li><a href="#初探-serverless">初探 serverless</a></li><li><a href="#冷启动">冷启动</a></li><li><a href="#腾讯教育相关业务的落地">腾讯教育相关业务的落地</a></li><li><a href="#腾讯云-serverless-devops">腾讯云 serverless devOps</a></li></ul></li><li><a href="#分享主题-阿里控制台系统提效之路">分享主题: 阿里控制台系统提效之路</a><ul class="toc-headings"><li><a href="#工作流">工作流</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

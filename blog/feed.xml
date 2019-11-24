@@ -22,6 +22,31 @@
 ]]></description>
         </item>
         <item>
+            <title><![CDATA[Nodejs之RPC调研]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/11/22/rpc.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/11/22/rpc.html</guid>
+            <pubDate>Fri, 22 Nov 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>随着 Nodejs 的兴起，越来越多的 Web 服务中间层被搭建起来。如Node服务端渲染，BFF(Backend For Frontend))层，而RPC是远端过程调用，经常用于BFF层。最近，我打算写一个中间层，用Nodejs调用Go服务，除了可以简单用http调用之外，发现还有基于RPC的调用就研究了一下。</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[npm命令使用技巧总结]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/11/19/npm.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/11/19/npm.html</guid>
+            <pubDate>Tue, 19 Nov 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>本文为翻译文章，原文链接：<a href="https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12">https://blog.usejournal.com/npm-tips-and-tricks-c96356fd1b12</a>。</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2019 TWeb 腾讯前端技术大会精彩回顾]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/11/17/tweb.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/11/17/tweb.html</guid>
+            <pubDate>Sun, 17 Nov 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>​
+周六的时候去了 TWeb 腾讯前端技术大会, 总结一下. 接下来的文章会结合自己的理解介绍大会中的重点内容和相关技术落地的成果或进度. 为了更清晰地阐述一些技术点，会加上自己的理解.</p>
+]]></description>
+        </item>
+        <item>
             <title><![CDATA[http2/http3总结]]></title>
             <link>https://shopee-sc.github.io/blog/2019/11/15/http.html</link>
             <guid>https://shopee-sc.github.io/blog/2019/11/15/http.html</guid>
