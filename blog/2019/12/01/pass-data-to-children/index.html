@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>在 React 组件中如何向 props.children 传递数据? · Shopee Supply Chain FE</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="在 `React` 组件中向 `props.children` 传递数据是设计 `ButtonGroup`/`CheckboxGroup` 等组件时常用的技巧，"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="在 React 组件中如何向 props.children 传递数据? · Shopee Supply Chain FE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://shopee-sc.github.io/blog/2019/12/01/pass-data-to-children"/><meta property="og:description" content="在 `React` 组件中向 `props.children` 传递数据是设计 `ButtonGroup`/`CheckboxGroup` 等组件时常用的技巧，"/><meta property="og:image" content="https://shopee-sc.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://shopee-sc.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://shopee-sc.github.io/blog/atom.xml" title="Shopee Supply Chain FE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://shopee-sc.github.io/blog/feed.xml" title="Shopee Supply Chain FE Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/favicon.ico" alt="Shopee Supply Chain FE"/><h2 class="headerTitleWithLogo">Shopee Supply Chain FE</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/shopee-sc" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/12/01/pass-data-to-children">在 React 组件中如何向 props.children 传递数据?</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/22/rpc">Nodejs之RPC调研</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/19/npm">npm命令使用技巧总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/17/tweb">2019 TWeb 腾讯前端技术大会精彩回顾</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/11/15/http">http2/http3总结</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/12/01/pass-data-to-children">在 React 组件中如何向 props.children 传递数据?</a></h1><p class="post-meta">December 1, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/beizhedenglong" target="_blank" rel="noreferrer noopener">Victor Wang</a></p></div></header><div><span><p>在 <code>React</code> 组件中向 <code>props.children</code> 传递数据是设计 <code>ButtonGroup</code>/<code>CheckboxGroup</code> 等组件时常用的技巧，
+我们都知道在 <code>React</code> 组件中向子组件传递数据很容易，但是如何向  <code>props.children</code> 传递数据呢？</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="向子组件传递数据"></a><a href="#向子组件传递数据" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>向子组件传递数据</h2>
+<p>向子组件传递数据很容易，我们只需要将数据放到子组件的 <code>props</code> 里就行了，例如：</p>
+<pre><code class="hljs css language-js">
+<span class="hljs-keyword">const</span> Checkbox = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { children, ...rest } = props
+  <span class="hljs-keyword">return</span> (
+    &lt;label&gt;
+      &lt;input type="checkbox" {...rest} /&gt;
+      {children}
+    &lt;/label&gt;
+  )
+}
+const CheckboxGroup = (props) =&gt; {
+  const { selected = [], group = [] } = props
+  return (
+    &lt;Fragment&gt;
+      {
+        group.map(
+          value =&gt; (
+            &lt;Checkbox
+              checked={selected.indexOf(value) &gt; -1}
+              key={value}
+            &gt;
+              {value}
+            &lt;/Checkbox&gt;
+          ),
+        )
+      }
+    &lt;/Fragment&gt;
+  )
+}
+
+
+render(
+  &lt;div&gt;
+    &lt;CheckboxGroup
+      group={[1, 2, 3]}
+      selected={[1, 3]}
+    /&gt;
+  &lt;/div&gt;,
+  document.getElementById('app'),
+)
+</code></pre>
+<p>在 <code>CheckboxGroup</code> 组件中，我们把 <code>checked</code> 以及 <code>children</code> 传给了子组件<code>Checkbox</code>。这样的确是可行的，但是这样会导致父组件的配置越来越臃肿，因为我们需要在 <code>CheckboxGroup</code> 上设置一些额外的配置来控制子组件 <code>Checkbox</code> 的样式与行为。为了避免这种情况，我们需要将 <code>CheckboxGroup</code> 和 <code>Checkbox</code> 拆开，<code>Checkbox</code> 的 <code>props</code> 用来控制自己独立的样式、行为等，<code>CheckboxGroup</code> 的 <code>props</code> 主要用来控制子组件是不是全选、哪些选中、自己的样式等，主流的组件库通常这样设计这类组件的API的：</p>
+<pre><code class="hljs">  <span class="hljs-tag">&lt;<span class="hljs-name">CheckboxGroup</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span> <span class="hljs-attr">checked</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">CheckboxGroup</span>&gt;</span>
+</code></pre>
+<p>这样使用起来更加灵活直观。为了达到这种效果，我们就需要在 <code>CheckboxGroup</code> 内向 <code>props.children</code> 传递数据。下面我们来看看有哪些常用的方法吧！</p>
+<h2><a class="anchor" aria-hidden="true" id="reactcloneelement"></a><a href="#reactcloneelement" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>React.cloneElement</code></h2>
+<p>我们可以借助一个  <code>React</code> 的一个顶层 <code>API</code>(<code>React.CloneElement</code>) 来动态的修改 <code>children</code> 的 <code>props</code>:</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> Checkbox = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { children, ...rest } = props
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> {<span class="hljs-attr">...rest</span>} /&gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+  )
+}
+const CheckboxGroup = (props) =&gt; {
+  const { selected = [], children } = props
+  return (
+    <span class="hljs-tag">&lt;<span class="hljs-name">Fragment</span>&gt;</span>
+      {
+        // children 不是数组我们需要用 React.Children.map 来遍历
+        // 或者把它转成数组
+        React.Children.map(children, (child) =&gt; {
+          if (!React.isValidElement(child)) {
+            return null
+          }
+          // 这里我们通常还会判断 child 的类型来确定是不是要传递相应的数据，这里我就不做了
+          const childProps = {
+            ...child.props,
+            checked: selected.findIndex(
+              value =&gt; value.toString() === child.props.children,
+            ) &gt; -1,
+          }
+          return React.cloneElement(child, childProps)
+        })
+      }
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Fragment</span>&gt;</span>
+  )
+}
+
+render(
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CheckboxGroup</span>
+      <span class="hljs-attr">selected</span>=<span class="hljs-string">{[1,</span> <span class="hljs-attr">2</span>]}
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CheckboxGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>,
+  document.getElementById('app'),
+)
+</span></code></pre>
+<p>这种做法有一个缺点，就是 <code>children</code> 不能嵌套，像下面这样就会失效：</p>
+<pre><code class="hljs css language-js">&lt;CheckboxGroup
+  selected={[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]}
+&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Fragment</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Fragment</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">CheckboxGroup</span>&gt;</span></span>
+</code></pre>
+<p>因为这时我们修改的就是 <code>Fragment</code> 的 <code>props</code> 了，而不是 <code>Checkbox</code> 的 <code>props</code>。下面我们来看看另外一种可以摆脱这种困扰的方法。</p>
+<h2><a class="anchor" aria-hidden="true" id="renderpropsrendercallback"></a><a href="#renderpropsrendercallback" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>renderProps/renderCallback</code></h2>
+<p>这里我们的 <code>CheckboxGroup</code> 可以接受一个函数，把子元素需要的数据放在该函数的参数列表里，然后动态的渲染子元素。我们直接来看实现：</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> Checkbox = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { children, ...rest } = props
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> {<span class="hljs-attr">...rest</span>} /&gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+  )
+}
+const CheckboxGroup = (props) =&gt; {
+  const { selected = [], children } = props
+  return (
+    <span class="hljs-tag">&lt;<span class="hljs-name">Fragment</span>&gt;</span>
+      {
+        children(selected)
+      }
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Fragment</span>&gt;</span>
+  )
+}
+
+render(
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CheckboxGroup</span>
+      <span class="hljs-attr">selected</span>=<span class="hljs-string">{[1,</span> <span class="hljs-attr">2</span>]}
+    &gt;</span>
+      {
+        selected =&gt; [1, 2, 3].map(value =&gt; (
+          <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>
+            <span class="hljs-attr">key</span>=<span class="hljs-string">{value}</span>
+            <span class="hljs-attr">checked</span>=<span class="hljs-string">{selected.indexOf(value)</span> &gt;</span> -1}
+          &gt;
+            {value}
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+        ))
+      }
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CheckboxGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>,
+  document.getElementById('app'),
+)
+</span></code></pre>
+<p>这种方法可以摆脱 <code>cloneElement</code> 带来的嵌套失效的问题，但是如果使用这种方式不注意拆分的话容易写出下面这种嵌套很深的代码：</p>
+<pre><code class="hljs css language-js">&lt;A&gt;
+  {() =&gt; (
+    &lt;B&gt;
+      {() =&gt; (
+        &lt;C&gt;
+          {() =&gt; &lt;D /&gt;}
+        &lt;/C&gt;
+      )}
+    &lt;/B&gt;
+  )}
+&lt;/A&gt;
+</code></pre>
+<p>有没有什么更好的办法呢？有的，我们可以借助 <code>Context</code> 来共享数据。</p>
+<h2><a class="anchor" aria-hidden="true" id="context"></a><a href="#context" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Context</code></h2>
+<p>当然使用 <code>Context</code> 或者其它状态管理工具逻辑都是一样的，我就不多说了。</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">const</span> checkboxContext = createContext([])
+
+<span class="hljs-keyword">const</span> Checkbox = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { children, ...rest } = props
+  <span class="hljs-keyword">const</span> selected = React.useContext(checkboxContext)
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span>
+        <span class="hljs-attr">checked</span>=<span class="hljs-string">{selected.findIndex(</span>
+          <span class="hljs-attr">value</span> =&gt;</span> value.toString() === children,
+        ) &gt; -1}
+        {...rest}
+      /&gt;
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+  )
+}
+
+const CheckboxGroup = (props) =&gt; {
+  const { selected = [], children } = props
+  const { Provider } = checkboxContext
+  return (
+    <span class="hljs-tag">&lt;<span class="hljs-name">Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{selected}</span>&gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Provider</span>&gt;</span>
+  )
+}
+
+render(
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CheckboxGroup</span>
+      <span class="hljs-attr">selected</span>=<span class="hljs-string">{[1,</span> <span class="hljs-attr">3</span>]}
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">Checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CheckboxGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>,
+  document.getElementById('app'),
+)
+
+</span></code></pre>
+<p>这里我们就不会有嵌套带来的各种各样的问题。</p>
+<p>本篇文章介绍了一些向 <code>props.children</code> 传递数据的常用方式，简单地分析了它们的优秀缺点，大家可以根据场景灵活选择。当然这类问题的本质还是如何优雅的解决 <code>React</code> 里各种各样的数据传递问题。</p>
+<p>最后，希望本篇文章对大家有所帮助。</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#向子组件传递数据">向子组件传递数据</a></li><li><a href="#reactcloneelement"><code>React.cloneElement</code></a></li><li><a href="#renderpropsrendercallback"><code>renderProps/renderCallback</code></a></li><li><a href="#context"><code>Context</code></a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Shopee</section></footer></div></body></html>

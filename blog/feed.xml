@@ -4,9 +4,9 @@
         <title>Shopee Supply Chain FE Blog</title>
         <link>https://shopee-sc.github.io/blog</link>
         <description>The best place to stay up-to-date with the latest Shopee Supply Chain FE news and events.</description>
-        <lastBuildDate>Thu, 01 Jan 1970 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 01 Dec 2019 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-        <generator>Feed for Node.js</generator>
+        <generator>https://github.com/jpmonette/feed</generator>
         <image>
             <title>Shopee Supply Chain FE Blog</title>
             <url>https://shopee-sc.github.io/img/favicon.ico</url>
@@ -14,11 +14,12 @@
         </image>
         <copyright>Copyright © 2019 Shopee</copyright>
         <item>
-            <title><![CDATA[深入了解强大的 ES6 「 ... 」 运算符]]></title>
-            <link>https://shopee-sc.github.io/blog/2019/20/21/es6.html</link>
-            <guid>https://shopee-sc.github.io/blog/2019/20/21/es6.html</guid>
-            <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
-            <description><![CDATA[<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
+            <title><![CDATA[在 React 组件中如何向 props.children 传递数据?]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/12/01/pass-data-to-children.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/12/01/pass-data-to-children.html</guid>
+            <pubDate>Sun, 01 Dec 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>在 <code>React</code> 组件中向 <code>props.children</code> 传递数据是设计 <code>ButtonGroup</code>/<code>CheckboxGroup</code> 等组件时常用的技巧，
+我们都知道在 <code>React</code> 组件中向子组件传递数据很容易，但是如何向  <code>props.children</code> 传递数据呢？</p>
 ]]></description>
         </item>
         <item>
@@ -102,6 +103,14 @@
             <guid>https://shopee-sc.github.io/blog/2019/10/22/webpack.html</guid>
             <pubDate>Tue, 22 Oct 2019 06:00:00 GMT</pubDate>
             <description><![CDATA[<p>总结了一些性能优化方法</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[深入了解强大的 ES6 「 ... 」 运算符]]></title>
+            <link>https://shopee-sc.github.io/blog/2019/10/21/es6.html</link>
+            <guid>https://shopee-sc.github.io/blog/2019/10/21/es6.html</guid>
+            <pubDate>Mon, 21 Oct 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><em>本文系统的介绍了「...」 操作符的入门和进阶用法</em></p>
 ]]></description>
         </item>
         <item>
